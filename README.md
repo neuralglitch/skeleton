@@ -7,12 +7,12 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square)](docker/web/Dockerfile)
 [![Apache](https://img.shields.io/badge/Apache-2.4-D22128.svg?style=flat-square)](https://httpd.apache.org/)
 [![Composer](https://img.shields.io/badge/Composer-Latest-885630.svg?style=flat-square)](https://getcomposer.org/)
-[![MySQL](https://img.shields.io/badge/MySQL-Ready-4479A1.svg?style=flat-square)](#)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-336791.svg?style=flat-square)](#)
-[![Redis](https://img.shields.io/badge/Redis-Enabled-DC382D.svg?style=flat-square)](#)
+[![MySQL](https://img.shields.io/badge/MySQL-Ready-4479A1.svg?style=flat-square)](https://www.mysql.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-336791.svg?style=flat-square)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-Enabled-DC382D.svg?style=flat-square)](https://redis.io/)
 <br/>
-[![Xdebug](https://img.shields.io/badge/Xdebug-Enabled-DB1F29.svg?style=flat-square)](#)
-[![SSL](https://img.shields.io/badge/SSL-HTTPS%20Ready-green.svg?style=flat-square)](#)
+[![Xdebug](https://img.shields.io/badge/Xdebug-Enabled-DB1F29.svg?style=flat-square)](https://xdebug.org/)
+[![SSL](https://img.shields.io/badge/SSL-HTTPS%20Ready-green.svg?style=flat-square)](docker/web/apache/certificate/)
 [![php](https://img.shields.io/badge/PHP-8.1+-4F5B93.svg?style=flat-square)](https://www.php.net/)
 [![symfony](https://img.shields.io/badge/Symfony-6.4%20LTS-1F2937.svg?style=flat-square)](https://www.symfony.com/)
 [![bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952b3.svg?style=flat-square)](https://getbootstrap.com/)
@@ -20,8 +20,8 @@
 
 [![PHPStan](https://img.shields.io/badge/PHPStan-Level%206-brightgreen.svg?style=flat-square)](phpstan.dist.neon)
 [![PHPUnit](https://img.shields.io/badge/PHPUnit-10.5-brightgreen.svg?style=flat-square)](phpunit.dist.xml)
-[![Coverage](https://img.shields.io/badge/Coverage-80%25%20Goal-yellow.svg?style=flat-square)](#)
-[![Maintenance](https://img.shields.io/badge/Maintained-Yes-green.svg?style=flat-square)](#)
+[![Coverage](https://img.shields.io/badge/Coverage-80%25%20Goal-yellow.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
+[![Maintenance](https://img.shields.io/badge/Maintained-Yes-green.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/commits/main)
 [![Tested on PHP](https://img.shields.io/badge/Tested%20on-PHP%208.1/8.2/8.3/8.4-4F5B93.svg?style=flat-square)](https://www.php.net/)
 
 [![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
