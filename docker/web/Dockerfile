@@ -1,6 +1,10 @@
 FROM php:8.1-apache
 
+# Set shell options for better error handling
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # System + PHP-Build-Deps
+# hadolint ignore=DL3008
 RUN rm -rf /var/www/html \
     && mkdir -p /var/www/public \
     && apt-get update \
@@ -17,7 +21,7 @@ RUN rm -rf /var/www/html \
         libzip-dev \
         postgresql-client \
         unzip zip \
-        $PHPIZE_DEPS
+        "$PHPIZE_DEPS"
 
 # PHP Config
 COPY php/php.ini /usr/local/etc/php/php.ini
@@ -34,7 +38,7 @@ RUN pecl install apcu \
     && pecl install xdebug \
     && docker-php-ext-enable apcu redis imagick
 
-RUN apt-get purge -y --auto-remove libmagickwand-dev libpq-dev $PHPIZE_DEPS \
+RUN apt-get purge -y --auto-remove libmagickwand-dev libpq-dev "$PHPIZE_DEPS" \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Composer
@@ -44,6 +48,7 @@ COPY composer/keys.dev.pub /root/.composer/keys.dev.pub
 COPY composer/keys.tags.pub /root/.composer/keys.tags.pub
 
 # symfony-cli
+# hadolint ignore=DL3008
 RUN curl -fsSL https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh | bash \
     && apt-get update \
     && apt-get install -y --no-install-recommends symfony-cli \
