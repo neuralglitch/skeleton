@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\VersionExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 
@@ -26,9 +27,7 @@ final class VersionExtensionTest extends TestCase
         self::assertSame('lts', $filters[0]->getName());
     }
 
-    /**
-     * @dataProvider ltsVersionProvider
-     */
+    #[DataProvider('ltsVersionProvider')]
     public function testFormatLtsAddsLtsSuffixToVersionsEndingInFour(string $version, string $expected): void
     {
         $result = $this->extension->formatLts($version);

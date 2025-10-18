@@ -3,7 +3,7 @@
     <div class="row g-4">
       {# LEFT: Info block #}
       <div class="col-12 col-lg-4">
-        <a class="d-inline-flex align-items-center mb-2 gap-2 text-white text-decoration-none" href="/" aria-label="Homepage">
+        <a class="d-inline-flex align-items-center mb-2 gap-2 text-white text-decoration-none" href="{{ path('home') }}" aria-label="Homepage">
           <img src="{{ asset('icons/skeleton.svg') }}" alt="Skeleton Logo" width="32" height="32" />
           <span class="fs-5 fw-semibold">Skeleton {{ app_version|lts }}</span>
         </a>

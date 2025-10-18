@@ -1,16 +1,16 @@
 <nav class="navbar bg-body-secondary">
     <div class="container-xxl">
-        <a class="navbar-brand inline-flex align-items-center text-dark" href="/" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Version {{ app_version|lts }}">
+        <a class="navbar-brand inline-flex align-items-center text-dark" href="{{ path('home') }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Version {{ app_version|lts }}">
             <img src="{{ asset('icons/skeleton.svg') }}" alt="Skeleton Logo" width="32" height="32" />
             <strong>Skeleton</strong>
         </a>
         <div class="d-flex align-items-center gap-3">
             <ul class="nav nav-pills mb-0">
                 <li class="nav-item">
-                    <a class="nav-link{% if app.request.attributes.get('_route') is same as 'skeleton_index' %} active{% endif %}" aria-current="page" href="/">Home</a>
+                    <a class="nav-link{% if app.request.attributes.get('_route') is same as 'skeleton_index' %} active" aria-current="page{% endif %}" href="{{ path('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{% if app.request.attributes.get('_route') starts with '_error' %} active{% endif %}" aria-current="page" href="{{ path('_error_index') }}">Error</a>
+                    <a class="nav-link{% if app.request.attributes.get('_route') starts with '_error' %} active" aria-current="page{% endif %}" href="{{ path('_error_index') }}">Error</a>
                 </li>
                 {#
                 <li class="nav-item">

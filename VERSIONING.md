@@ -92,8 +92,8 @@ git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproje
 - **Recommended:** Use `main-7.4` (Symfony 7.4 LTS, newest LTS)
 
 **For New Development:**
-- **Recommended:** Use `main-7.4` (latest LTS)
-- **Alternative:** Use `main-7.3` (current stable, shorter support)
+- **Recommended:** Use `main-7.3` (current stable) or `main-7.4` (latest LTS)
+- **Alternative:** Use `main-6.4` (older LTS)
 
 **For Legacy Projects (PHP 8.1):**
 - Use `main-6.4` (Symfony 6.4 supports PHP 8.1)
@@ -500,45 +500,45 @@ git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git test-short
 Always start by detecting the Symfony version:
 
 ```bash
-bin/detect-symfony-version
+docker compose exec web bin/detect-symfony-version
 ```
 
 **Output example:**
 ```
-✅ Detected Symfony version: 6.4.26
+✅ Detected Symfony version: 7.3.0
 ℹ️  From: composer.lock (installed version)
 
 ℹ️  Next skeleton version:
-  • 6.4.1 - Next release (includes Symfony 6.4.26)
-  • 6.4 - Branch/short tag (optional)
+  • 7.3.1 - Next release (includes Symfony 7.3.0)
+  • 7.3 - Branch/short tag (optional)
 
 ℹ️  Version strategy:
-  ✓ Branch: main-6.4
-  ✓ Tags: 6.4.0, 6.4.1, 6.4.2, etc.
+  ✓ Branch: main-7.3
+  ✓ Tags: 7.3.0, 7.3.1, 7.3.2, etc.
   ✓ Tag when: Skeleton improvements, not every Symfony patch
 
 ℹ️  To create a new skeleton release:
-  bin/tag-version 6.4.1
+  bin/tag-version 7.3.1
 ```
 
 ### Method 1: Local Script (Recommended for Development)
 
 ```bash
 # Checkout the branch
-git checkout main-6.4
+git checkout main-7.3
 
 # Check suggested version
-bin/detect-symfony-version
+docker compose exec web bin/detect-symfony-version
 
 # Create tag
-bin/tag-version 6.4.1
+docker compose exec web bin/tag-version 7.3.1
 
 # Push tag
-git push origin 6.4.1
+git push origin 7.3.1
 
 # Update short tag (optional)
-git tag -f 6.4
-git push -f origin 6.4
+git tag -f 7.3
+git push -f origin 7.3
 ```
 
 ### Method 2: GitHub Actions Manual Workflow
@@ -554,13 +554,13 @@ git push -f origin 6.4
 ### Method 3: Manual Git Tagging
 
 ```bash
-git tag -a 6.4.1 -m "Release version 6.4.1
+git tag -a 7.3.1 -m "Release version 7.3.1
 
 - Docker improvements
 - Updated CI/CD workflows
 - Bug fixes"
 
-git push origin 6.4.1
+git push origin 7.3.1
 ```
 
 ### Updating Short Tags
@@ -569,8 +569,8 @@ After creating a new release, update the short tag:
 
 ```bash
 # Point short tag to latest release
-git tag -f 6.4
-git push -f origin 6.4
+git tag -f 7.3
+git push -f origin 7.3
 ```
 
 ---

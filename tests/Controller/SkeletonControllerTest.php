@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class SkeletonControllerTest extends WebTestCase
 {
-    /**
-     * @dataProvider routeProvider
-     */
+    #[DataProvider('routeProvider')]
     public function testRouteIsSuccessful(string $url, int $expectedStatusCode = 200): void
     {
         $client = self::createClient();
@@ -48,9 +47,7 @@ final class SkeletonControllerTest extends WebTestCase
         self::assertSelectorExists('html');
     }
 
-    /**
-     * @dataProvider errorPageProvider
-     */
+    #[DataProvider('errorPageProvider')]
     public function testErrorPageRendersWithCorrectStatusCode(
         string $url,
         int $expectedStatusCode

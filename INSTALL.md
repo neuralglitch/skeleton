@@ -43,7 +43,7 @@ cd <project>
 **Specific version (recommended for production):**
 ```bash
 # Clone and checkout a specific version tag
-git clone --branch 6.4 --depth 1 https://github.com/neuralglitch/skeleton.git <project>
+git clone --branch 7.3 --depth 1 https://github.com/neuralglitch/skeleton.git <project>
 cd <project>
 ```
 
@@ -51,7 +51,7 @@ cd <project>
 ```bash
 git clone https://github.com/neuralglitch/skeleton.git <project>
 cd <project>
-git checkout 6.4
+git checkout 7.3
 ```
 
 > **Note:** See [available versions/tags](https://github.com/neuralglitch/skeleton/tags) or use `git tag -l` to list all versions.
@@ -188,7 +188,7 @@ The Symfony CLI provides a local web server with TLS support.
 For quick testing without additional tools.
 
 #### Prerequisites
-- PHP 8.1+ installed locally
+- PHP 8.2+ installed locally
 
 #### Setup
 

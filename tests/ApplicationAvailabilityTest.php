@@ -6,11 +6,11 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 final class ApplicationAvailabilityTest extends WebTestCase
 {
-    /**
-     * @dataProvider urlProvider
-     */
+    #[DataProvider('urlProvider')]
     public function testPageIsSuccessful(string $url): void
     {
         $client = self::createClient();
@@ -22,5 +22,11 @@ final class ApplicationAvailabilityTest extends WebTestCase
     public static function urlProvider(): \Generator
     {
         yield ['/'];
+        yield ['/_error'];
+        yield ['/_error/403'];
+        yield ['/_error/404'];
+        yield ['/_error/500'];
+        yield ['/_error/503'];
+        yield ['/_error/generic'];
     }
 }

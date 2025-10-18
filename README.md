@@ -13,28 +13,28 @@
 <br/>
 [![Xdebug](https://img.shields.io/badge/Xdebug-Enabled-DB1F29.svg?style=flat-square)](https://xdebug.org/)
 [![SSL](https://img.shields.io/badge/SSL-HTTPS%20Ready-green.svg?style=flat-square)](docker/web/apache/certificate/)
-[![php](https://img.shields.io/badge/PHP-8.1+-4F5B93.svg?style=flat-square)](https://www.php.net/)
-[![symfony](https://img.shields.io/badge/Symfony-6.4%20LTS-1F2937.svg?style=flat-square)](https://www.symfony.com/)
+[![php](https://img.shields.io/badge/PHP-8.2+-4F5B93.svg?style=flat-square)](https://www.php.net/)
+[![symfony](https://img.shields.io/badge/Symfony-7.3-1F2937.svg?style=flat-square)](https://www.symfony.com/)
 [![bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952b3.svg?style=flat-square)](https://getbootstrap.com/)
 [![license](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 [![PHPStan](https://img.shields.io/badge/PHPStan-Level%206-brightgreen.svg?style=flat-square)](phpstan.dist.neon)
-[![PHPUnit](https://img.shields.io/badge/PHPUnit-10.5-brightgreen.svg?style=flat-square)](phpunit.dist.xml)
+[![PHPUnit](https://img.shields.io/badge/PHPUnit-11.5-brightgreen.svg?style=flat-square)](phpunit.dist.xml)
 [![Coverage](https://img.shields.io/badge/Coverage-80%25%20Goal-yellow.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
 [![Maintenance](https://img.shields.io/badge/Maintained-Yes-green.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/commits/main)
-[![Tested on PHP](https://img.shields.io/badge/Tested%20on-PHP%208.1/8.2/8.3/8.4-4F5B93.svg?style=flat-square)](https://www.php.net/)
+[![Tested on PHP](https://img.shields.io/badge/Tested%20on-PHP%208.2/8.3/8.4-4F5B93.svg?style=flat-square)](https://www.php.net/)
 
-[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
-[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
-[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
-[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
+[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
+[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
+[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
+[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
 </div>
 
 ---
 
 ## Overview
 
-A modern **Symfony 6.4 LTS** starter kit/boilerplate designed as a production-ready foundation for web applications. This skeleton demonstrates contemporary frontend tooling without Node.js complexity, leveraging Symfony's AssetMapper for a streamlined development experience.
+A modern **Symfony 7.3** starter kit/boilerplate designed as a production-ready foundation for web applications. This skeleton demonstrates contemporary frontend tooling without Node.js complexity, leveraging Symfony's AssetMapper for a streamlined development experience.
 
 ### Purpose
 
@@ -44,7 +44,7 @@ This project serves as a comprehensive starting point that showcases:
 - Stimulus JavaScript framework for progressive enhancement
 - Docker-based development environment with SSL
 - Enterprise-grade CI/CD pipeline with multiple quality gates
-- Best practices for PHP 8.1+ and Symfony 6.4 development
+- Best practices for PHP 8.2+ and Symfony 7.3 development
 
 ---
 
@@ -81,8 +81,8 @@ This project serves as a comprehensive starting point that showcases:
 ## Technology Stack
 
 ### Backend
-- **PHP 8.1+** (tested on 8.1, 8.2, 8.3, 8.4)
-- **Symfony 6.4** (LTS version with long-term support)
+- **PHP 8.2+** (tested on 8.2, 8.3, and 8.4)
+- **Symfony 7.3** (current stable version)
 - **Composer** for dependency management
 
 ### Frontend
@@ -114,7 +114,7 @@ For detailed installation instructions, see **[INSTALL.md](INSTALL.md)**
 
 1. **Clone the repository** (use a specific version tag for production):
    ```bash
-   git clone --branch 6.4 --depth 1 https://github.com/neuralglitch/skeleton.git myproject
+   git clone --branch 7.3 --depth 1 https://github.com/neuralglitch/skeleton.git myproject
    ```
 2. Build and start Docker containers
 3. Install dependencies with Composer
@@ -127,9 +127,9 @@ See the [Installation Guide](INSTALL.md) for complete step-by-step instructions 
 
 This project uses **branch-per-Symfony-version** strategy:
 
-**Clone Symfony 6.4 LTS (Recommended):**
+**Clone Symfony 7.3 (Current Stable):**
 ```bash
-git clone --branch main-6.4 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproject
 ```
 
 **Clone latest version:**
@@ -157,7 +157,7 @@ skeleton/
 │   └── routes/          # Routing configuration
 ├── docker/              # Docker configuration
 │   └── web/             # Web container setup
-│       ├── Dockerfile   # PHP 8.1-Apache image
+│       ├── Dockerfile   # PHP 8.3-Apache image
 │       ├── apache/      # Apache config & SSL certificates
 │       └── php/         # PHP configuration
 ├── public/              # Web root
@@ -256,7 +256,7 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 - **Composer Validation** - Dependency integrity checks
 
 ### Testing
-- **PHPUnit 10.5** with comprehensive configuration
+- **PHPUnit 11.5** with comprehensive configuration
 - **80% Code Coverage Goal** - Monitored in CI/CD
 - **Matrix Testing** - Tested across PHP 8.1, 8.2, 8.3, and 8.4
 - **Functional Tests** - Application availability testing included
@@ -271,7 +271,7 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 ## Use Cases
 
 This skeleton is ideal for:
-- 🏗️ Starting new Symfony 6.4 projects with modern tooling
+- 🏗️ Starting new Symfony 7.3 projects with modern tooling
 - 📚 Learning Symfony with AssetMapper (no webpack/vite complexity)
 - 🎨 Projects requiring deep Bootstrap customization
 - 🐳 Teams wanting Docker-based development environments
@@ -286,7 +286,7 @@ This skeleton is ideal for:
 ### Key Architectural Decisions
 
 1. **No Node.js Required** - Uses AssetMapper instead of traditional bundlers, reducing complexity and build times
-2. **PHP 8.1+ Only** - Leverages modern PHP features including attributes for routing
+2. **PHP 8.2+ Only** - Leverages modern PHP features including attributes for routing
 3. **Docker-First Approach** - Entire development environment is containerized and reproducible
 4. **Symfony Flex** - Modern, minimal Symfony project structure
 5. **Multi-Stage Quality Gates** - 4 separate CI/CD workflows for comprehensive validation
@@ -308,7 +308,7 @@ This skeleton is ideal for:
 - Automatic vendor management via ImportMap
 
 ### Docker Services
-- **Web Service** - PHP 8.1-Apache with SSL
+- **Web Service** - PHP 8.3-Apache with SSL
 - Exposes ports 80 (HTTP) and 443 (HTTPS)
 - Volume mounting for live code updates
 
