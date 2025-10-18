@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class SkeletonControllerTest extends WebTestCase
+final class SkeletonControllerTest extends WebTestCase
 {
     /**
      * @dataProvider routeProvider

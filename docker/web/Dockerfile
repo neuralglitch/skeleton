@@ -38,6 +38,7 @@ RUN pecl install apcu \
     && pecl install imagick \
     && pecl install xdebug \
     && docker-php-ext-enable apcu redis imagick
+# Note: Xdebug is NOT enabled by default (controlled via xdebug.ini)
 
 # hadolint ignore=SC2086
 RUN apt-get purge -y --auto-remove libmagickwand-dev libpq-dev $PHPIZE_DEPS \

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Twig;
 
 use App\Twig\VersionExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 
-class VersionExtensionTest extends TestCase
+final class VersionExtensionTest extends TestCase
 {
     private VersionExtension $extension;
 

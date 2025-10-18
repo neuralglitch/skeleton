@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Kernel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
-class KernelTest extends TestCase
+final class KernelTest extends TestCase
 {
     public function testKernelExtendsBaseKernel(): void
     {

@@ -5,6 +5,22 @@ echo "=========================================="
 echo "Running startup checks..."
 echo "=========================================="
 
+# Xdebug control via environment variable
+# By default (no env var set), Xdebug is DISABLED for performance
+if [ "${XDEBUG_ENABLED}" = "1" ] || [ "${XDEBUG_ENABLED}" = "true" ]; then
+    echo ""
+    echo ">>> Enabling Xdebug (XDEBUG_ENABLED=${XDEBUG_ENABLED})"
+    # Uncomment zend_extension line
+    if [ -f "/usr/local/etc/php/conf.d/xdebug.ini" ]; then
+        sed -i 's/^;zend_extension=xdebug.so/zend_extension=xdebug.so/' /usr/local/etc/php/conf.d/xdebug.ini
+    fi
+else
+    # Disable by default (comment out zend_extension)
+    if [ -f "/usr/local/etc/php/conf.d/xdebug.ini" ]; then
+        sed -i 's/^zend_extension=xdebug.so/;zend_extension=xdebug.so/' /usr/local/etc/php/conf.d/xdebug.ini
+    fi
+fi
+
 # Change to the application directory
 cd /var/www
 
