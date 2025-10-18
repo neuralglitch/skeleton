@@ -243,7 +243,7 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 **IDE Setup:**
 - **Port:** 9003
 - **Path mapping:** `/var/www` → `${workspaceFolder}`
-- See `.cursor/rules/xdebug-management.mdc` for detailed IDE configuration
+- Configure your IDE to listen on port 9003 for Xdebug connections
 
 ---
 
