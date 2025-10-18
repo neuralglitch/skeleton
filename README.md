@@ -62,7 +62,7 @@ This project serves as a comprehensive starting point that showcases:
 
 ### Backend & DevOps
 - **Docker Environment** - Complete containerized setup with Apache, SSL, and PHP extensions
-- **Comprehensive Testing** - PHPUnit 10.5 with 80% coverage goal
+- **Comprehensive Testing** - PHPUnit 11.5 with 80% coverage goal
 - **Static Analysis** - PHPStan Level 6 for code quality
 - **Security Focused** - Roave security advisories integration
 - **Web Profiler** - Built-in debugging and profiling tools
@@ -92,7 +92,7 @@ This project serves as a comprehensive starting point that showcases:
 - **ImportMap** for JavaScript module management
 
 ### Development Tools
-- **PHPUnit 10.5** - Unit and functional testing
+- **PHPUnit 11.5** - Unit and functional testing
 - **PHPStan Level 6** - Advanced static analysis
 - **Docker** with Apache, SSL certificates, and PHP extensions
 - **Symfony CLI** - Enhanced development commands

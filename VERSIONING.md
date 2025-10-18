@@ -388,7 +388,7 @@ Initial Symfony 6.4 LTS skeleton release
 - Stimulus Bundle for reactive JavaScript
 - Comprehensive CI/CD pipeline (6 workflows)
 - PHPStan Level 6 static analysis
-- PHPUnit 10.5 testing framework
+- PHPUnit 11.5 testing framework
 - Symfony 6.4 LTS support until November 2027
 ```
 
