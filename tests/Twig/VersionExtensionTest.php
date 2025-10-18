@@ -19,7 +19,6 @@ class VersionExtensionTest extends TestCase
     {
         $filters = $this->extension->getFilters();
 
-        self::assertIsArray($filters);
         self::assertCount(1, $filters);
         self::assertInstanceOf(TwigFilter::class, $filters[0]);
         self::assertSame('lts', $filters[0]->getName());
