@@ -35,6 +35,14 @@ if [ -f "bin/check-php-extensions" ]; then
     php bin/check-php-extensions || echo "⚠️  check-php-extensions failed with exit code $?"
 fi
 
+# Run detect-symfony-version
+if [ -f "bin/detect-symfony-version" ]; then
+    echo ""
+    echo ">>> Running: php bin/detect-symfony-version"
+    echo "------------------------------------------"
+    php bin/detect-symfony-version || echo "⚠️  detect-symfony-version failed with exit code $?"
+fi
+
 # Run phpunit if vendor exists
 if [ -z "$SKIP_VENDOR_CHECKS" ] && [ -f "vendor/bin/phpunit" ]; then
     echo ""

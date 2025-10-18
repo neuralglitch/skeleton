@@ -2,6 +2,7 @@
 **/*_tmp*
 .docker/
 .idea/
+.bin/
 .editorconfig
 
 ###> symfony/framework-bundle ###
