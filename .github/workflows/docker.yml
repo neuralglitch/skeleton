@@ -51,8 +51,12 @@ jobs:
         run: echo "✅ Docker image built successfully"
   
   docker-compose:
-    name: Test Docker Compose
+    name: Test Docker Compose (Xdebug=${{ matrix.xdebug }})
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        xdebug: ['0', '1']
     
     steps:
       - name: Checkout code
@@ -65,6 +69,7 @@ jobs:
           APP_DEBUG=1
           APP_SECRET=docker-compose-test-secret
           DEFAULT_URI=http://localhost
+          XDEBUG_ENABLED=${{ matrix.xdebug }}
           EOF
       
       - name: Validate docker-compose.yml
@@ -129,6 +134,26 @@ jobs:
             echo "⚠️ Unexpected HTTP response code: $RESPONSE"
           fi
       
+      - name: Verify Xdebug state
+        run: |
+          XDEBUG_LOADED=$(docker compose -f compose.yml exec -T web php -m | grep -c xdebug || true)
+          
+          if [ "${{ matrix.xdebug }}" = "1" ]; then
+            if [ "$XDEBUG_LOADED" -gt 0 ]; then
+              echo "✅ Xdebug is enabled as expected"
+              docker compose -f compose.yml exec -T web php -v
+            else
+              echo "❌ ERROR: Xdebug should be enabled but is not loaded"
+              exit 1
+            fi
+          else
+            if [ "$XDEBUG_LOADED" -eq 0 ]; then
+              echo "✅ Xdebug is disabled as expected (optimal performance)"
+            else
+              echo "⚠️ WARNING: Xdebug is loaded when it should be disabled"
+            fi
+          fi
+      
       - name: Show logs on failure
         if: failure()
         run: docker compose -f compose.yml logs
@@ -139,5 +164,5 @@ jobs:
       
       - name: Report success
         if: success()
-        run: echo "✅ Docker Compose setup validated successfully"
+        run: echo "✅ Docker Compose setup validated successfully (Xdebug=${{ matrix.xdebug }})"
 

@@ -96,13 +96,13 @@ This project serves as a comprehensive starting point that showcases:
 - **PHPStan Level 6** - Advanced static analysis
 - **Docker** with Apache, SSL certificates, and PHP extensions
 - **Symfony CLI** - Enhanced development commands
-- **Xdebug** - Debugging support
+- **Xdebug** - Easily toggleable debugging and code coverage (disabled by default)
 
 ### PHP Extensions Included
 - bcmath, exif, gd, intl, mbstring, pcntl
 - PDO (MySQL/PostgreSQL support)
 - APCu, Redis, Imagick
-- Xdebug for development
+- Xdebug (disabled by default, easy toggle via `bin/xdebug`)
 
 ---
 
@@ -190,6 +190,60 @@ skeleton/
 - **ImportMap** - JavaScript dependencies without npm (see `importmap.php`)
 - **Turbo Integration** - Enhanced navigation and form handling
 - **Bootstrap JS** - Interactive components
+
+---
+
+## Development Environment
+
+### Xdebug Management
+
+Xdebug is **installed but disabled by default** for optimal performance. Enable it when you need debugging or code coverage analysis.
+
+**Quick Toggle:**
+```bash
+# Check status
+docker compose exec web bin/xdebug status
+
+# Enable for debugging
+docker compose exec web bin/xdebug on
+docker compose restart web
+
+# Enable for coverage
+docker compose exec web bin/xdebug coverage
+docker compose restart web
+
+# Disable
+docker compose exec web bin/xdebug off
+docker compose restart web
+```
+
+**Enable on Container Start:**
+```bash
+# Temporary (this session only)
+XDEBUG_ENABLED=1 docker compose up -d
+
+# Permanent (via .env file)
+echo "XDEBUG_ENABLED=1" > .env
+docker compose up -d
+```
+
+**Run Tests with Coverage:**
+```bash
+# Enable coverage mode
+docker compose exec web bin/xdebug coverage
+docker compose restart web
+
+# Generate coverage report
+docker compose exec web vendor/bin/phpunit --coverage-text
+docker compose exec web vendor/bin/phpunit --coverage-html coverage/
+```
+
+**Performance Note:** Xdebug slows execution by 2-3x. Keep it disabled during regular development and only enable when needed.
+
+**IDE Setup:**
+- **Port:** 9003
+- **Path mapping:** `/var/www` → `${workspaceFolder}`
+- See `.cursor/rules/xdebug-management.mdc` for detailed IDE configuration
 
 ---
 

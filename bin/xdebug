@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+#
+# Xdebug control script - easily enable/disable Xdebug
+#
+# Usage:
+#   bin/xdebug on       - Enable Xdebug
+#   bin/xdebug off      - Disable Xdebug
+#   bin/xdebug status   - Check Xdebug status
+#   bin/xdebug coverage - Enable Xdebug in coverage mode
+
+set -e
+
+# Color codes
+YC="\033[1;33m" # Yellow
+GC="\033[0;32m" # Green
+BC="\033[1;34m" # Blue
+NC="\033[0m"    # No Color
+RC="\033[0;31m" # Red
+
+XDEBUG_INI="/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+XDEBUG_CONFIG="/usr/local/etc/php/conf.d/xdebug.ini"
+
+function show_status() {
+    echo -e "${BC}Xdebug Status${NC}"
+    echo "=============="
+    echo ""
+    
+    if php -m | grep -q xdebug; then
+        echo -e "${GC}✓ Xdebug is ENABLED${NC}"
+        echo ""
+        php -v | grep -i xdebug || true
+        echo ""
+        
+        if [ -f "$XDEBUG_CONFIG" ]; then
+            echo -e "${BC}Current Configuration:${NC}"
+            cat "$XDEBUG_CONFIG"
+        fi
+    else
+        echo -e "${YC}✗ Xdebug is DISABLED${NC}"
+    fi
+}
+
+function enable_xdebug() {
+    echo -e "${BC}Enabling Xdebug...${NC}"
+    
+    if [ -f "$XDEBUG_CONFIG" ]; then
+        # Ensure mode is debug
+        sed -i 's/xdebug.mode=coverage/xdebug.mode=debug/' "$XDEBUG_CONFIG"
+        # Uncomment zend_extension line
+        sed -i 's/^;zend_extension=xdebug.so/zend_extension=xdebug.so/' "$XDEBUG_CONFIG"
+        sed -i 's/^#zend_extension=xdebug.so/zend_extension=xdebug.so/' "$XDEBUG_CONFIG"
+    fi
+    
+    echo -e "${GC}✓ Xdebug enabled${NC}"
+    echo ""
+    echo -e "${YC}Note: Apache restart required for changes to take effect${NC}"
+    echo "Run: docker compose restart web"
+}
+
+function disable_xdebug() {
+    echo -e "${BC}Disabling Xdebug...${NC}"
+    
+    if [ -f "$XDEBUG_CONFIG" ]; then
+        # Comment out the zend_extension line
+        sed -i 's/^zend_extension=xdebug.so/;zend_extension=xdebug.so/' "$XDEBUG_CONFIG"
+        echo -e "${GC}✓ Xdebug disabled${NC}"
+        echo ""
+        echo -e "${YC}Note: Apache restart required for changes to take effect${NC}"
+        echo "Run: docker compose restart web"
+    else
+        echo -e "${YC}Xdebug config not found${NC}"
+    fi
+}
+
+function enable_coverage() {
+    echo -e "${BC}Enabling Xdebug in coverage mode...${NC}"
+    
+    if [ -f "$XDEBUG_CONFIG" ]; then
+        # Set mode to coverage
+        sed -i 's/xdebug.mode=debug/xdebug.mode=coverage/' "$XDEBUG_CONFIG"
+        # Uncomment zend_extension line
+        sed -i 's/^;zend_extension=xdebug.so/zend_extension=xdebug.so/' "$XDEBUG_CONFIG"
+        sed -i 's/^#zend_extension=xdebug.so/zend_extension=xdebug.so/' "$XDEBUG_CONFIG"
+    fi
+    
+    echo -e "${GC}✓ Xdebug enabled in coverage mode${NC}"
+    echo ""
+    echo -e "${YC}Note: Apache restart required for changes to take effect${NC}"
+    echo "Run: docker compose restart web"
+}
+
+function show_help() {
+    echo -e "${BC}Xdebug Control Script${NC}"
+    echo "===================="
+    echo ""
+    echo "Usage:"
+    echo "  bin/xdebug on       - Enable Xdebug (debug mode)"
+    echo "  bin/xdebug off      - Disable Xdebug"
+    echo "  bin/xdebug status   - Check Xdebug status"
+    echo "  bin/xdebug coverage - Enable Xdebug (coverage mode)"
+    echo "  bin/xdebug help     - Show this help"
+    echo ""
+    echo "Examples:"
+    echo "  docker compose exec web bin/xdebug on"
+    echo "  docker compose exec web bin/xdebug status"
+    echo "  docker compose exec web bin/xdebug off"
+}
+
+# Main
+case "${1:-status}" in
+    on|enable)
+        enable_xdebug
+        ;;
+    off|disable)
+        disable_xdebug
+        ;;
+    status)
+        show_status
+        ;;
+    coverage)
+        enable_coverage
+        ;;
+    help|--help|-h)
+        show_help
+        ;;
+    *)
+        echo -e "${RC}Error: Unknown command '${1}'${NC}"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac
+

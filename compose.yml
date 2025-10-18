@@ -8,6 +8,10 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      # Set XDEBUG_ENABLED=1 to enable Xdebug on container start
+      # Or use: docker compose exec web bin/xdebug on
+      XDEBUG_ENABLED: ${XDEBUG_ENABLED:-0}
     stdin_open: true
     tty: true
     extra_hosts:
