@@ -13,7 +13,7 @@ if [ ! -d "vendor" ]; then
     echo ""
     echo ">>> Vendor directory not found, running: composer install"
     echo "------------------------------------------"
-    composer install --no-interaction --prefer-dist --optimize-autoloader || {
+    composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader || {
         echo "⚠️  Composer install failed, skipping vendor-dependent checks"
         SKIP_VENDOR_CHECKS=1
     }

@@ -10,6 +10,7 @@ RUN rm -rf /var/www/html \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        curl \
         default-mysql-client \
         gnupg \
         imagemagick \
