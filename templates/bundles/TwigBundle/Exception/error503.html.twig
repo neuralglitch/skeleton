@@ -1,0 +1,34 @@
+{% extends 'bundles/TwigBundle/Exception/base_error.html.twig' %}
+
+{% block title %}Service Unavailable{% endblock %}
+
+{% block error_icon %}
+    <twig:ux:icon name="bi:x-lg" class="mb-3 text-danger opacity-75" width="96" />
+{% endblock %}
+
+{% block error_title %}Service Unavailable{% endblock %}
+
+{% block error_message %}
+    We're performing scheduled maintenance. Please check back shortly.
+{% endblock %}
+
+{% block error_details %}
+    <div class="alert alert-info border-info mb-4">
+        <div class="d-flex align-items-start text-start">
+            <twig:ux:icon name="bi:info-circle" style="width: 24px; height: 24px;" class="me-2 flex-shrink-0" />
+            <div class="small">
+                <strong>What's happening?</strong><br>
+                Our team is working on improvements to serve you better. This should only take a few minutes.
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block error_footer %}
+    <div class="mt-4 pt-4 border-top text-muted small">
+        <div class="spinner-border spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        We'll be back online shortly.
+    </div>
+{% endblock %}

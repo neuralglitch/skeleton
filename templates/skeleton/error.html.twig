@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Error Page Preview{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4">Error Page Preview</h1>
+    
+    <div class="alert alert-warning mb-3">
+        <strong><twig:ux:icon name="bi:exclamation-triangle" width="20" /> Development Only:</strong> This controller is for previewing error pages in dev mode. Remove it before deploying to production!
+    </div>
+
+    <div class="alert alert-info mb-4">
+        <strong><twig:ux:icon name="bi:info-square" width="20" /> How it works:</strong>
+        <ul class="mb-0 mt-2">
+            <li><strong>Preview mode (here):</strong> Templates are rendered directly so you can see your designs</li>
+            <li><strong>Real errors:</strong> When actual errors occur, Symfony will automatically use these templates (when <code>APP_DEBUG=0</code>)</li>
+            <li><strong>Dev mode (<code>APP_DEBUG=1</code>):</strong> Real errors show the debug view with stack traces</li>
+        </ul>
+    </div>
+
+    <div class="list-group">
+        <a href="{{ path('_error_404') }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="my-0">404 - Not Found</h5>
+                <span class="btn btn-sm btn-secondary">Preview</span>
+            </div>
+            <p class="my-0">Page or resource not found</p>
+        </a>
+
+        <a href="{{ path('_error_403') }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="my-0">403 - Access Denied</h5>
+                <span class="btn btn-sm btn-warning">Preview</span>
+            </div>
+            <p class="my-0">Access forbidden</p>
+        </a>
+
+        <a href="{{ path('_error_503') }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="my-0">503 - Service Unavailable</h5>
+                <span class="btn btn-sm btn-danger">Preview</span>
+            </div>
+            <p class="my-0">Service temporarily unavailable</p>
+        </a>
+
+        <a href="{{ path('_error_500') }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="my-0">500 - Internal Server Error</h5>
+                <span class="btn btn-sm btn-danger">Preview</span>
+            </div>
+            <p class="my-0">Generic server error</p>
+        </a>
+
+        <a href="{{ path('_error_generic') }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="my-0">418 - Generic Error (Fallback)</h5>
+                <span class="btn btn-sm btn-info">Preview</span>
+            </div>
+            <p class="my-0">Generic error template for all other status codes</p>
+        </a>
+    </div>
+
+    <div class="mt-4">
+        <h3>How to customize error pages:</h3>
+        <ol>
+            <li>Edit templates in <code>templates/bundles/TwigBundle/Exception/</code></li>
+            <li>Available templates:
+                <ul>
+                    <li><code>base_error.html.twig</code> - Base template for all error pages</li>
+                    <li><code>error404.html.twig</code> - Specific 404 page</li>
+                    <li><code>error403.html.twig</code> - Specific 403 page</li>
+                    <li><code>error500.html.twig</code> - Specific 500 page</li>
+                    <li><code>error503.html.twig</code> - Specific 503 page</li>
+                    <li><code>error.html.twig</code> - Generic error page (fallback for all other codes)</li>
+                </ul>
+            </li>
+            <li>Preview error pages here in dev mode, or set <code>APP_DEBUG=0</code> to see production versions</li>
+            <li>Error pages work by throwing exceptions - Symfony catches them and renders the appropriate template</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,181 @@
+name: Manual Tag Creation
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: 'Tag version (e.g., 6.4.26, or leave empty to auto-detect)'
+        required: false
+        type: string
+      release_notes:
+        description: 'Release notes (optional)'
+        required: false
+        type: string
+      create_release:
+        description: 'Create GitHub Release'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  manual-tag:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+      
+      - name: Detect Symfony version
+        id: detect
+        run: |
+          SYMFONY_VERSION=$(php bin/detect-symfony-version --json | jq -r '.symfony_version')
+          SUGGESTED_TAG=$(php bin/detect-symfony-version --json | jq -r '.suggested_tag')
+          
+          echo "symfony_version=$SYMFONY_VERSION" >> $GITHUB_OUTPUT
+          echo "suggested_tag=$SUGGESTED_TAG" >> $GITHUB_OUTPUT
+          
+          echo "Detected Symfony version: $SYMFONY_VERSION"
+          echo "Suggested tag: $SUGGESTED_TAG"
+      
+      - name: Determine tag version
+        id: tag
+        run: |
+          if [ -n "${{ inputs.tag_version }}" ]; then
+            TAG="${{ inputs.tag_version }}"
+            echo "Using provided tag: $TAG"
+          else
+            TAG="${{ steps.detect.outputs.suggested_tag }}"
+            echo "Using auto-detected tag: $TAG"
+          fi
+          
+          echo "version=$TAG" >> $GITHUB_OUTPUT
+      
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="${{ steps.tag.outputs.version }}"
+          
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "❌ Tag $TAG already exists"
+            exit 1
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "✅ Tag $TAG is available"
+          fi
+      
+      - name: Validate tag format
+        run: |
+          TAG="${{ steps.tag.outputs.version }}"
+          
+          if ! echo "$TAG" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+)?$'; then
+            echo "❌ Invalid tag format: $TAG"
+            echo "Expected format: MAJOR.MINOR.PATCH (e.g., 6.4.26)"
+            exit 1
+          fi
+          
+          echo "✅ Tag format is valid"
+      
+      - name: Validate Symfony alignment
+        run: |
+          TAG="${{ steps.tag.outputs.version }}"
+          SYMFONY_SHORT="${{ steps.detect.outputs.symfony_version }}"
+          SYMFONY_SHORT=$(echo "$SYMFONY_SHORT" | grep -oE '^[0-9]+\.[0-9]+')
+          
+          if ! echo "$TAG" | grep -qE "^${SYMFONY_SHORT}\."; then
+            echo "⚠️ Warning: Tag $TAG doesn't match Symfony version ${{ steps.detect.outputs.symfony_version }}"
+            echo "Expected: ${SYMFONY_SHORT}.x"
+          else
+            echo "✅ Tag matches Symfony version"
+          fi
+      
+      - name: Create annotated tag
+        run: |
+          TAG="${{ steps.tag.outputs.version }}"
+          SYMFONY_VERSION="${{ steps.detect.outputs.symfony_version }}"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Build tag message
+          if [ -n "${{ inputs.release_notes }}" ]; then
+            TAG_MESSAGE="Release version $TAG
+
+Symfony $SYMFONY_VERSION
+
+${{ inputs.release_notes }}
+
+Created via GitHub Actions"
+          else
+            TAG_MESSAGE="Release version $TAG
+
+Symfony $SYMFONY_VERSION
+
+Automated release created by GitHub Actions."
+          fi
+          
+          git tag -a "$TAG" -m "$TAG_MESSAGE"
+          git push origin "$TAG"
+          
+          echo "✅ Created and pushed tag: $TAG"
+      
+      - name: Create GitHub Release
+        if: inputs.create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.version }}
+          release_name: Version ${{ steps.tag.outputs.version }}
+          body: |
+            ## Symfony ${{ steps.detect.outputs.symfony_version }} Skeleton
+            
+            ${{ inputs.release_notes || 'Release for Symfony ' }}${{ steps.detect.outputs.symfony_version }}
+            
+            ### Installation
+            
+            ```bash
+            git clone --branch ${{ steps.tag.outputs.version }} --depth 1 https://github.com/${{ github.repository }}.git myproject
+            ```
+            
+            ### Features
+            
+            - **Symfony ${{ steps.detect.outputs.symfony_version }}** - LTS version with long-term support
+            - **Docker Environment** - Complete containerized setup with Apache and SSL
+            - **AssetMapper** - Modern frontend without Node.js complexity
+            - **Bootstrap 5.3** - Full SCSS customization
+            - **Stimulus Bundle** - Reactive JavaScript controllers
+            - **Comprehensive CI/CD** - 4 separate workflows for quality assurance
+            - **PHPStan Level 6** - Advanced static analysis
+            - **PHPUnit 10.5** - Testing framework
+            
+            ---
+            
+            See [VERSIONING.md](https://github.com/${{ github.repository }}/blob/main/VERSIONING.md) for version strategy.
+          draft: false
+          prerelease: false
+      
+      - name: Summary
+        run: |
+          echo "### Tag Creation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tag Created**: \`${{ steps.tag.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "🔖 **Symfony Version**: \`${{ steps.detect.outputs.symfony_version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **GitHub Release**: ${{ inputs.create_release && 'Created' || 'Skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Clone This Version" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "git clone --branch ${{ steps.tag.outputs.version }} --depth 1 https://github.com/${{ github.repository }}.git myproject" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+

@@ -1,0 +1,25 @@
+{% extends 'bundles/TwigBundle/Exception/base_error.html.twig' %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block error_icon %}
+    <twig:ux:icon name="bi:shield-lock" class="mb-3 text-danger opacity-75" width="96" />
+{% endblock %}
+
+{% block error_title %}Access Denied{% endblock %}
+
+{% block error_message %}
+    You don't have permission to access this resource.
+{% endblock %}
+
+{% block error_details %}
+    <div class="alert alert-warning border-warning mb-4">
+        <div class="d-flex align-items-center text-start">
+            <twig:ux:icon name="bi:shield-lock" width="1.5rem" class="me-2 flex-shrink-0" />
+            <div class="small">
+                <strong>This area is restricted.</strong><br>
+                Please check your credentials or contact an administrator.
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+// Custom styles here
+.btn-primary {
+  @include button-variant($primary, $primary, $color: #fff);
+}
+.btn-secondary {
+  @include button-variant($secondary, $secondary, $color: #fff);
+}
+.btn-success {
+  @include button-variant($success, $success, $color: #fff);
+}
+.btn-danger {
+  @include button-variant($danger, $danger, $color: #fff);
+}
+.btn-warning {
+  @include button-variant($warning, $warning, $color: #fff);
+}
+.btn-info {
+  @include button-variant($info, $info, $color: #fff);
+}
+.btn-light {
+  @include button-variant($light, $light, $color: #000);
+}
+.btn-dark {
+  @include button-variant($dark, $dark, $color: #fff);
+}

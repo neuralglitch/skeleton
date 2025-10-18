@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Skeleton {{ app_version|lts }}{% endblock %}</title>
+    <link rel="icon" sizes="any" type="image/svg+xml"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22 aria-hidden=%22true%22><rect x=%220%22 y=%220%22 width=%22128%22 height=%22128%22 rx=%2221.333%22 fill=%22%23444444%22/><g transform=%22translate(16,16)%20scale(3)%22><path fill=%22%23ffffff%22 d=%22M25.947%2011.14c0-5.174-3.98-9.406-10.613-9.406S5.052%205.966%205.052%2011.14s1.46%204.51%201.46%207.43c0%201.095-1.062.564-1.062%202.92c0%202.586%203.615%202.222%204.677%203.282c1.06%201.062.96%203.02.96%203.02s.2.795.565.562c0%200%20.232.564.498.232c0%200%20.265.563.53.1c0%200%20.266.63.697.166c0%200%20.43.63.93.133c0%200%20.563.53%201.193.133c.63.397%201.194-.133%201.194-.133c.497.497.93-.133.93-.133c.43.465.694-.166.694-.166c.268.464.53-.1.53-.1c.267.332.5-.232.5-.232c.364.232.563-.563.563-.563s-.1-1.956.962-3.018c1.062-1.06%204.676-.696%204.676-3.283c0-2.355-1.06-1.825-1.06-2.92c0-2.92%201.46-2.256%201.46-7.43zm-15.614%209.852c-1.783.285-2.59-.215-2.785-1.492c-.508-3.328%202.555-3.866%204.08-3.683c.73.088%201.99.862%201.99%201.825c0%202.587-1.626%203.085-3.285%203.35m6.128%204.31c-.33%200-.86-.43-.894-1.226c-.033.796-.63%201.227-.96%201.227c-.333%200-.83-.33-.864-1.127c-.033-.796%201.028-4.013%201.792-4.013c.762%200%201.824%203.217%201.79%204.013s-.53%201.127-.863%201.127zm6.9-5.802c-.194%201.277-1.003%201.777-2.786%201.492c-1.658-.266-3.283-.763-3.283-3.35c0-.963%201.26-1.737%201.99-1.825c1.525-.183%204.59.355%204.08%203.683z%22/></g></svg>">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+    {% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100" {% block body_attr %}{% endblock %}>
+{# TOP: Main navigation #}
+{% include 'partials/top.html.twig' %}
+<div class="container-xxl my-4 my-lg-5 flex-grow-1">
+    <div class="row g-4">
+        {# Content #}
+        <main class="col-12">
+            {% block body %}{% endblock %}
+        </main>
+    </div>
+</div>
+{# BOTTOM: Footer #}
+{% include 'partials/footer.html.twig' %}
+</body>
+</html>

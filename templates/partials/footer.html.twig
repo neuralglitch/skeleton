@@ -1,0 +1,87 @@
+<footer class="mt-auto border-top border-white border-opacity-10 bg-dark text-light">
+  <div class="container-xxl py-5">
+    <div class="row g-4">
+      {# LEFT: Info block #}
+      <div class="col-12 col-lg-4">
+        <a class="d-inline-flex align-items-center mb-2 gap-2 text-white text-decoration-none" href="/" aria-label="Homepage">
+          <img src="{{ asset('icons/skeleton.svg') }}" alt="Skeleton Logo" width="32" height="32" />
+          <span class="fs-5 fw-semibold">Skeleton {{ app_version|lts }}</span>
+        </a>
+        <p class="mb-3">
+          Symfony Flex starter kit with AssetMapper, SassBundle, Bootstrap SCSS customization, StimulusBundle, UX Icons and UX Twig Components
+        </p>
+      </div>
+
+      {# RIGHT: 4 link columns #}
+      <div class="col-12 col-lg-8">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          <div class="col">
+            <h6 class="text-uppercase small fw-semibold text-white mb-3">Resources</h6>
+            <ul class="nav flex-column small">
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://symfony.com">Symfony</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://ux.symfony.com">Symfony UX</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://getbootstrap.com">Bootstrap</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://www.docker.com">Docker</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://httpd.apache.org">Apache HTTP Server</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://www.php.net">PHP</a></li>
+            </ul>
+          </div>
+
+          <div class="col">
+            <h6 class="text-uppercase small fw-semibold text-white mb-3">Docs</h6>
+            <ul class="nav flex-column small">
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://symfony.com/doc">Symfony</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://ux.symfony.com/documentation">Symfony UX</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://getbootstrap.com/docs/5.3">Bootstrap</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://docs.docker.com">Docker</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://httpd.apache.org/docs/2.4/">Apache HTTP Server</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://www.php.net/docs.php">PHP</a></li>
+            </ul>
+          </div>
+
+          <div class="col">
+            <h6 class="text-uppercase small fw-semibold text-white mb-3">Placeholders</h6>
+            <ul class="nav flex-column small">
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://www.lipsum.com">Lorem Ipsum</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://pirateipsum.me">Pirate Ipsum</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://picsum.photos">Lorem Picsum</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://gwfh.mranftl.com/">Google Webfonts Helper</a></li>
+            </ul>
+          </div>
+
+          <div class="col">
+            <h6 class="text-uppercase small fw-semibold text-white mb-3">Read</h6>
+            <ul class="nav flex-column small">
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://medium.com">Medium</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://dev.to">Dev</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://hackernoon.com/c">Hackernoon</a></li>
+              <li class="nav-item mb-2"><a class="nav-link p-0 link-light" target="_blank" href="https://hashnode.com/blog">Hashnode</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Bottom bar #}
+  <div class="border-top border-white border-opacity-10">
+    <div class="container-xxl py-3">
+      <div class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-center small">
+        <div class="d-inline-flex align-items-center gap-2">
+          <span>&copy; {{ "now"|date("Y") }}</span>
+          <a class="icon-link link-light" href="https://neuralglit.ch" target="_blank">
+            <twig:ux:icon name="mynaui:letter-n-square-solid" width="24" height="24"/>
+            neuralglit.ch
+          </a>
+          |
+          <span>All rights reserved.</span>
+        </div>
+        <ul class="nav gap-3">
+          <li class="nav-item"><a class="nav-link p-0 link-light" href="#">Imprint</a></li>
+          <li class="nav-item"><a class="nav-link p-0 link-light" href="#">Privacy</a></li>
+          <li class="nav-item"><a class="nav-link p-0 link-light" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

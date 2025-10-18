@@ -1,0 +1,33 @@
+{% extends 'bundles/TwigBundle/Exception/base_error.html.twig' %}
+
+{% block title %}Error {{ status_code }}{% endblock %}
+
+{% block error_title %}{{ status_text }}{% endblock %}
+
+{% block error_message %}
+    Something went wrong while processing your request.
+{% endblock %}
+
+{% block error_details %}
+    {% if status_code >= 500 %}
+        <div class="alert alert-danger border-danger mb-4">
+            <div class="d-flex align-items-start">
+                <twig:ux:icon name="bi:exclamation-triangle" style="width: 24px; height: 24px;" class="me-2 flex-shrink-0" />
+                <div class="small">
+                    <strong>Server Error</strong><br>
+                    An unexpected error occurred on our servers. Our team has been notified.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block error_footer %}
+    <div class="mt-4 pt-4 border-top text-muted small">
+        {% if status_code >= 500 %}
+            If this problem persists, please contact our support team with error code: <strong>{{ status_code }}</strong>
+        {% else %}
+            If you believe this is a mistake, please contact support.
+        {% endif %}
+    </div>
+{% endblock %}

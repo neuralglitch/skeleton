@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Error {{ status_code }} - {{ status_text }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="card shadow-lg border-0 rounded-3" style="max-width: 600px; width: 100%;">
+            <div class="card-body p-5 text-center">
+                {% block error_icon %}
+                    <twig:ux:icon name="bi:exclamation-triangle" class="mb-3 text-danger opacity-75" width="96" />
+                {% endblock %}
+                
+                <div class="display-1 fw-bold text-danger mb-3">
+                    {% block error_code %}{{ status_code }}{% endblock %}
+                </div>
+                
+                <h1 class="h2 text-danger mb-3">{% block error_title %}{{ status_text }}{% endblock %}</h1>
+                
+                <p class="text-muted mb-4">
+                    {% block error_message %}
+                        An error occurred while processing your request.
+                    {% endblock %}
+                </p>
+
+                {% block error_details %}{% endblock %}
+
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    {% block error_actions %}
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                            <twig:ux:icon name="bi:arrow-left" class="me-1" width="20" />
+                            Go Back
+                        </a>
+                        <a href="{{ path('skeleton_index') }}" class="btn btn-primary">
+                            <twig:ux:icon name="bi:house-door" class="me-1" width="20" />
+                            Home Page
+                        </a>
+                    {% endblock %}
+                </div>
+
+                {% block error_footer %}
+                    <div class="mt-4 pt-4 border-top text-muted small">
+                        If this problem persists, please contact support.
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

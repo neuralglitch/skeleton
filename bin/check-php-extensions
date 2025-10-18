@@ -1,0 +1,505 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * PHP Extensions Checker
+ * 
+ * Displays installed PHP extensions organized by category with support for
+ * multiple output formats and filtering options.
+ * 
+ * @author Skeleton Framework
+ * @license MIT
+ */
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const EXTENSION_GROUPS = [
+    'Core' => ['core', 'standard', 'spl', 'pcre', 'date', 'hash', 'json', 'libxml', 'reflection', 'session', 'tokenizer', 'readline', 'posix', 'random'],
+    'DB' => ['pdo', 'pdo_mysql', 'pdo_pgsql', 'pdo_sqlite', 'mysqlnd', 'pgsql', 'sqlite3', 'mongodb'],
+    'Cache' => ['apcu', 'opcache', 'zend opcache', 'redis', 'memcached'],
+    'Crypto' => ['openssl', 'sodium', 'mcrypt'],
+    'Image' => ['gd', 'imagick', 'exif', 'fileinfo'],
+    'Intl/Text' => ['intl', 'mbstring', 'iconv', 'gettext'],
+    'XML' => ['xml', 'xmlreader', 'xmlwriter', 'simplexml', 'dom', 'xsl'],
+    'Networking/IO' => ['curl', 'sockets', 'ftp', 'ssh2'],
+    'Archive/Compression' => ['zip', 'zlib', 'bz2', 'phar', 'rar'],
+    'Debug/QA' => ['xdebug', 'pcov', 'tideways'],
+    'Math' => ['bcmath', 'gmp'],
+    'Process/Signals' => ['pcntl', 'posix', 'shmop', 'sysvmsg', 'sysvsem', 'sysvshm'],
+];
+
+const RECOMMENDED_EXTENSIONS = [
+    'Core' => ['json', 'mbstring', 'openssl'],
+    'DB' => ['pdo'],
+    'Intl/Text' => ['intl', 'mbstring'],
+];
+
+const COLOR_RESET = "\033[0m";
+const COLOR_GREEN = "\033[32m";
+const COLOR_YELLOW = "\033[33m";
+const COLOR_BLUE = "\033[34m";
+const COLOR_CYAN = "\033[36m";
+const COLOR_RED = "\033[31m";
+const COLOR_BOLD = "\033[1m";
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Display help information
+ */
+function displayHelp(): void
+{
+    echo <<<HELP
+PHP Extensions Checker
+
+USAGE:
+    check-php-extensions [OPTIONS]
+
+OPTIONS:
+    --help              Show this help message
+    --json              Output in JSON format
+    --csv               Output in CSV format
+    --markdown          Output in Markdown table format
+    --group=<name>      Filter by specific group (e.g., --group=DB)
+    --count             Show only counts per group
+    --verbose           Show detailed information (versions, PHP info)
+    --no-color          Disable colored output
+    --show-missing      Show missing recommended extensions
+    --list-groups       List all available groups
+
+EXAMPLES:
+    check-php-extensions
+    check-php-extensions --verbose
+    check-php-extensions --group=DB
+    check-php-extensions --json
+    check-php-extensions --show-missing
+
+HELP;
+}
+
+/**
+ * Parse command line arguments
+ * 
+ * @param array<int, string> $argv
+ * @return array<string, mixed>
+ */
+function parseArguments(array $argv): array
+{
+    $options = [
+        'format' => 'text',
+        'group' => null,
+        'count' => false,
+        'verbose' => false,
+        'color' => true,
+        'show_missing' => false,
+        'list_groups' => false,
+    ];
+
+    for ($i = 1; $i < count($argv); $i++) {
+        $arg = $argv[$i];
+        
+        if ($arg === '--help' || $arg === '-h') {
+            displayHelp();
+            exit(0);
+        } elseif ($arg === '--json') {
+            $options['format'] = 'json';
+        } elseif ($arg === '--csv') {
+            $options['format'] = 'csv';
+        } elseif ($arg === '--markdown' || $arg === '--md') {
+            $options['format'] = 'markdown';
+        } elseif ($arg === '--count') {
+            $options['count'] = true;
+        } elseif ($arg === '--verbose' || $arg === '-v') {
+            $options['verbose'] = true;
+        } elseif ($arg === '--no-color') {
+            $options['color'] = false;
+        } elseif ($arg === '--show-missing') {
+            $options['show_missing'] = true;
+        } elseif ($arg === '--list-groups') {
+            $options['list_groups'] = true;
+        } elseif (str_starts_with($arg, '--group=')) {
+            $options['group'] = substr($arg, 8);
+        } else {
+            echo colorize("Unknown option: {$arg}" . PHP_EOL, COLOR_RED);
+            echo "Use --help for usage information." . PHP_EOL;
+            exit(1);
+        }
+    }
+
+    return $options;
+}
+
+/**
+ * Colorize text for terminal output
+ */
+function colorize(string $text, string $color, bool $useColor = true): string
+{
+    global $options;
+    
+    if (!$useColor || (isset($options['color']) && !$options['color'])) {
+        return $text;
+    }
+    
+    return $color . $text . COLOR_RESET;
+}
+
+/**
+ * Get extension version if available
+ */
+function getExtensionVersion(string $extension): ?string
+{
+    try {
+        $version = phpversion($extension);
+        return $version !== false ? $version : null;
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
+/**
+ * Build extension map with metadata
+ * 
+ * @return array<string, array{name: string, version: string|null}>
+ */
+function buildExtensionMap(): array
+{
+    $extensions = get_loaded_extensions();
+    $map = [];
+    
+    foreach ($extensions as $extension) {
+        $key = strtolower($extension);
+        $map[$key] = [
+            'name' => $extension,
+            'version' => getExtensionVersion($extension),
+        ];
+    }
+    
+    return $map;
+}
+
+/**
+ * Categorize extensions by groups
+ * 
+ * @param array<string, array{name: string, version: string|null}> $extensionMap
+ * @param string|null $filterGroup
+ * @return array<string, array<string, array{name: string, version: string|null}>>
+ */
+function categorizeExtensions(array $extensionMap, ?string $filterGroup = null): array
+{
+    $categorized = [];
+    $seen = [];
+    
+    $groups = $filterGroup 
+        ? array_filter(EXTENSION_GROUPS, fn($k) => strcasecmp($k, $filterGroup) === 0, ARRAY_FILTER_USE_KEY)
+        : EXTENSION_GROUPS;
+    
+    if ($filterGroup && empty($groups)) {
+        echo colorize("Error: Group '{$filterGroup}' not found." . PHP_EOL, COLOR_RED);
+        echo "Use --list-groups to see available groups." . PHP_EOL;
+        exit(1);
+    }
+    
+    foreach ($groups as $groupName => $wantedExtensions) {
+        $foundExtensions = [];
+        
+        foreach ($wantedExtensions as $wanted) {
+            $key = strtolower($wanted);
+            if (isset($extensionMap[$key]) && !isset($seen[$key])) {
+                $foundExtensions[$key] = $extensionMap[$key];
+                $seen[$key] = true;
+            }
+        }
+        
+        if (!empty($foundExtensions)) {
+            uksort($foundExtensions, fn($a, $b) => strnatcasecmp($a, $b));
+            $categorized[$groupName] = $foundExtensions;
+        }
+    }
+    
+    // Add uncategorized extensions
+    if (!$filterGroup) {
+        $other = array_filter($extensionMap, fn($k) => !isset($seen[$k]), ARRAY_FILTER_USE_KEY);
+        if (!empty($other)) {
+            uksort($other, fn($a, $b) => strnatcasecmp($a, $b));
+            $categorized['Other'] = $other;
+        }
+    }
+    
+    // Sort groups alphabetically, but keep "Other" at the end
+    $sortedCategorized = [];
+    $otherGroup = null;
+    
+    // Separate "Other" from the rest
+    if (isset($categorized['Other'])) {
+        $otherGroup = $categorized['Other'];
+        unset($categorized['Other']);
+    }
+    
+    // Sort remaining groups alphabetically
+    ksort($categorized, SORT_NATURAL | SORT_FLAG_CASE);
+    $sortedCategorized = $categorized;
+    
+    // Add "Other" at the end if it exists
+    if ($otherGroup !== null) {
+        $sortedCategorized['Other'] = $otherGroup;
+    }
+    
+    return $sortedCategorized;
+}
+
+/**
+ * Find missing recommended extensions
+ * 
+ * @param array<string, array{name: string, version: string|null}> $extensionMap
+ * @return array<string, array<int, string>>
+ */
+function findMissingRecommended(array $extensionMap): array
+{
+    $missing = [];
+    
+    foreach (RECOMMENDED_EXTENSIONS as $group => $recommendations) {
+        foreach ($recommendations as $extension) {
+            $key = strtolower($extension);
+            if (!isset($extensionMap[$key])) {
+                if (!isset($missing[$group])) {
+                    $missing[$group] = [];
+                }
+                $missing[$group][] = $extension;
+            }
+        }
+    }
+    
+    return $missing;
+}
+
+/**
+ * Get PHP system information
+ * 
+ * @return array<string, string>
+ */
+function getPhpInfo(): array
+{
+    return [
+        'PHP Version' => PHP_VERSION,
+        'Zend Version' => zend_version(),
+        'SAPI' => php_sapi_name(),
+        'OS' => PHP_OS,
+        'Architecture' => PHP_INT_SIZE * 8 . '-bit',
+    ];
+}
+
+// ============================================================================
+// OUTPUT FORMATTERS
+// ============================================================================
+
+/**
+ * Output in text format
+ */
+function outputText(array $categorized, array $options): void
+{
+    $useColor = $options['color'];
+    
+    echo PHP_EOL;
+    echo colorize("Installed PHP Extensions", COLOR_BOLD . COLOR_CYAN, $useColor) . PHP_EOL;
+    echo colorize(str_repeat('=', 80), COLOR_CYAN, $useColor) . PHP_EOL;
+    echo PHP_EOL;
+    
+    if ($options['verbose']) {
+        echo colorize("System Information:", COLOR_BOLD . COLOR_BLUE, $useColor) . PHP_EOL;
+        foreach (getPhpInfo() as $key => $value) {
+            echo colorize("  {$key}: ", COLOR_BLUE, $useColor);
+            echo colorize($value, COLOR_GREEN, $useColor) . PHP_EOL;
+        }
+        echo PHP_EOL;
+    }
+    
+    $totalExtensions = 0;
+    
+    foreach ($categorized as $groupName => $extensions) {
+        $count = count($extensions);
+        $totalExtensions += $count;
+        
+        echo colorize("{$groupName}", COLOR_BOLD . COLOR_YELLOW, $useColor);
+        echo colorize(" ({$count})", COLOR_CYAN, $useColor) . PHP_EOL;
+        
+        if (!$options['count']) {
+            foreach ($extensions as $data) {
+                $name = $data['name'];
+                $version = $data['version'];
+                
+                echo "  • " . colorize($name, COLOR_GREEN, $useColor);
+                if ($options['verbose'] && $version) {
+                    echo colorize(" (v{$version})", COLOR_BLUE, $useColor);
+                }
+                echo PHP_EOL;
+            }
+        }
+        
+        echo PHP_EOL;
+    }
+    
+    echo colorize(str_repeat('-', 80), COLOR_CYAN, $useColor) . PHP_EOL;
+    echo colorize("Total: {$totalExtensions} extensions", COLOR_BOLD . COLOR_GREEN, $useColor) . PHP_EOL;
+    
+    if ($options['show_missing']) {
+        $extensionMap = buildExtensionMap();
+        $missing = findMissingRecommended($extensionMap);
+        
+        if (!empty($missing)) {
+            echo PHP_EOL;
+            echo colorize("Missing Recommended Extensions:", COLOR_BOLD . COLOR_RED, $useColor) . PHP_EOL;
+            foreach ($missing as $group => $extensions) {
+                echo colorize("  {$group}: ", COLOR_YELLOW, $useColor);
+                echo colorize(implode(', ', $extensions), COLOR_RED, $useColor) . PHP_EOL;
+            }
+        }
+    }
+    
+    echo PHP_EOL;
+}
+
+/**
+ * Output in JSON format
+ */
+function outputJson(array $categorized, array $options): void
+{
+    $output = [
+        'php_version' => PHP_VERSION,
+        'zend_version' => zend_version(),
+        'total_extensions' => array_sum(array_map('count', $categorized)),
+        'groups' => [],
+    ];
+    
+    foreach ($categorized as $groupName => $extensions) {
+        $output['groups'][$groupName] = array_map(
+            fn($ext) => $options['verbose'] 
+                ? ['name' => $ext['name'], 'version' => $ext['version']]
+                : $ext['name'],
+            array_values($extensions)
+        );
+    }
+    
+    if ($options['show_missing']) {
+        $extensionMap = buildExtensionMap();
+        $output['missing_recommended'] = findMissingRecommended($extensionMap);
+    }
+    
+    echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+}
+
+/**
+ * Output in CSV format
+ */
+function outputCsv(array $categorized, array $options): void
+{
+    echo "Group,Extension,Version" . PHP_EOL;
+    
+    foreach ($categorized as $groupName => $extensions) {
+        foreach ($extensions as $data) {
+            $version = $data['version'] ?? '';
+            echo "\"{$groupName}\",\"{$data['name']}\",\"{$version}\"" . PHP_EOL;
+        }
+    }
+}
+
+/**
+ * Output in Markdown format
+ */
+function outputMarkdown(array $categorized, array $options): void
+{
+    echo "# Installed PHP Extensions" . PHP_EOL . PHP_EOL;
+    
+    if ($options['verbose']) {
+        echo "## System Information" . PHP_EOL . PHP_EOL;
+        foreach (getPhpInfo() as $key => $value) {
+            echo "- **{$key}**: {$value}" . PHP_EOL;
+        }
+        echo PHP_EOL;
+    }
+    
+    echo "## Extensions by Category" . PHP_EOL . PHP_EOL;
+    
+    foreach ($categorized as $groupName => $extensions) {
+        echo "### {$groupName} (" . count($extensions) . ")" . PHP_EOL . PHP_EOL;
+        
+        if ($options['verbose']) {
+            echo "| Extension | Version |" . PHP_EOL;
+            echo "|-----------|---------|" . PHP_EOL;
+            foreach ($extensions as $data) {
+                $version = $data['version'] ?? 'N/A';
+                echo "| {$data['name']} | {$version} |" . PHP_EOL;
+            }
+        } else {
+            foreach ($extensions as $data) {
+                echo "- {$data['name']}" . PHP_EOL;
+            }
+        }
+        
+        echo PHP_EOL;
+    }
+    
+    $total = array_sum(array_map('count', $categorized));
+    echo "**Total Extensions**: {$total}" . PHP_EOL;
+}
+
+/**
+ * List all available groups
+ */
+function listGroups(): void
+{
+    echo PHP_EOL;
+    echo colorize("Available Extension Groups:", COLOR_BOLD . COLOR_CYAN) . PHP_EOL;
+    echo colorize(str_repeat('=', 80), COLOR_CYAN) . PHP_EOL;
+    echo PHP_EOL;
+    
+    $groups = array_keys(EXTENSION_GROUPS);
+    sort($groups, SORT_NATURAL | SORT_FLAG_CASE);
+    
+    foreach ($groups as $group) {
+        echo "  • " . colorize($group, COLOR_GREEN) . PHP_EOL;
+    }
+    
+    echo PHP_EOL;
+}
+
+// ============================================================================
+// MAIN EXECUTION
+// ============================================================================
+
+try {
+    $options = parseArguments($argv);
+    
+    if ($options['list_groups']) {
+        listGroups();
+        exit(0);
+    }
+    
+    $extensionMap = buildExtensionMap();
+    $categorized = categorizeExtensions($extensionMap, $options['group']);
+    
+    switch ($options['format']) {
+        case 'json':
+            outputJson($categorized, $options);
+            break;
+        case 'csv':
+            outputCsv($categorized, $options);
+            break;
+        case 'markdown':
+            outputMarkdown($categorized, $options);
+            break;
+        default:
+            outputText($categorized, $options);
+            break;
+    }
+    
+    exit(0);
+} catch (Throwable $e) {
+    echo colorize("Error: " . $e->getMessage() . PHP_EOL, COLOR_RED);
+    exit(1);
+}

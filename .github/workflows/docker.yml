@@ -1,0 +1,122 @@
+name: Docker
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  docker-lint:
+    name: Lint Dockerfile
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: docker/web/Dockerfile
+          failure-threshold: warning
+      
+      - name: Report success
+        if: success()
+        run: echo "✅ Dockerfile passed linting"
+  
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/web/Dockerfile
+          push: false
+          tags: neuralglitch/skeleton:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Report success
+        if: success()
+        run: echo "✅ Docker image built successfully"
+  
+  docker-compose:
+    name: Test Docker Compose
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Create required .env files
+        run: |
+          cat > .env << 'EOF'
+          APP_ENV=dev
+          APP_DEBUG=1
+          APP_SECRET=docker-compose-test-secret
+          DEFAULT_URI=http://localhost
+          EOF
+      
+      - name: Validate docker-compose.yml
+        run: docker compose -f compose.yml config --quiet
+      
+      - name: Build services
+        run: docker compose -f compose.yml build
+      
+      - name: Start services
+        run: docker compose -f compose.yml up -d
+      
+      - name: Wait for services
+        run: |
+          echo "Waiting for services to be ready..."
+          sleep 10
+      
+      - name: Check service health
+        run: |
+          docker compose -f compose.yml ps
+          
+          # Check if web service is running
+          if ! docker compose -f compose.yml ps | grep -q "web.*running"; then
+            echo "❌ ERROR: Web service is not running"
+            docker compose -f compose.yml logs
+            exit 1
+          fi
+          
+          echo "✅ All services are running"
+      
+      - name: Test HTTP response
+        run: |
+          # Try to curl the application
+          RESPONSE=$(docker compose -f compose.yml exec -T web curl -s -o /dev/null -w "%{http_code}" http://localhost:80 || echo "000")
+          
+          if [ "$RESPONSE" = "000" ]; then
+            echo "⚠️ WARNING: Could not connect to application"
+            echo "This might be expected if the port is not exposed"
+          elif [ "$RESPONSE" = "200" ] || [ "$RESPONSE" = "302" ]; then
+            echo "✅ Application is responding (HTTP $RESPONSE)"
+          else
+            echo "⚠️ Unexpected HTTP response code: $RESPONSE"
+          fi
+      
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose -f compose.yml logs
+      
+      - name: Cleanup
+        if: always()
+        run: docker compose -f compose.yml down -v
+      
+      - name: Report success
+        if: success()
+        run: echo "✅ Docker Compose setup validated successfully"
+

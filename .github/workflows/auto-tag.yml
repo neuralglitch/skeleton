@@ -1,0 +1,122 @@
+name: Auto Tag on Symfony Update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'composer.lock'
+
+permissions:
+  contents: write
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+      
+      - name: Detect Symfony version
+        id: detect
+        run: |
+          # Get Symfony version from composer.lock
+          SYMFONY_VERSION=$(php bin/detect-symfony-version --json | jq -r '.symfony_version')
+          SUGGESTED_TAG=$(php bin/detect-symfony-version --json | jq -r '.suggested_tag')
+          
+          echo "symfony_version=$SYMFONY_VERSION" >> $GITHUB_OUTPUT
+          echo "suggested_tag=$SUGGESTED_TAG" >> $GITHUB_OUTPUT
+          
+          echo "Detected Symfony version: $SYMFONY_VERSION"
+          echo "Suggested tag: $SUGGESTED_TAG"
+      
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="${{ steps.detect.outputs.suggested_tag }}"
+          
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG does not exist"
+          fi
+      
+      - name: Get commit message
+        id: commit
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMIT_MSG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create and push tag
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          TAG="${{ steps.detect.outputs.suggested_tag }}"
+          SYMFONY_VERSION="${{ steps.detect.outputs.symfony_version }}"
+          
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create annotated tag
+          git tag -a "$TAG" -m "Release version $TAG
+
+Symfony $SYMFONY_VERSION
+
+Automated release created by GitHub Actions.
+
+Commit: ${{ github.sha }}
+${{ steps.commit.outputs.message }}"
+          
+          # Push tag
+          git push origin "$TAG"
+          
+          echo "✅ Created and pushed tag: $TAG"
+      
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.detect.outputs.suggested_tag }}
+          release_name: Version ${{ steps.detect.outputs.suggested_tag }}
+          body: |
+            ## Symfony ${{ steps.detect.outputs.symfony_version }} Skeleton
+            
+            Automated release for Symfony ${{ steps.detect.outputs.symfony_version }}.
+            
+            ### Installation
+            
+            ```bash
+            git clone --branch ${{ steps.detect.outputs.suggested_tag }} --depth 1 https://github.com/${{ github.repository }}.git myproject
+            ```
+            
+            ### Changes
+            
+            ${{ steps.commit.outputs.message }}
+            
+            ---
+            
+            See [VERSIONING.md](https://github.com/${{ github.repository }}/blob/main/VERSIONING.md) for version strategy.
+          draft: false
+          prerelease: false
+      
+      - name: Tag already exists
+        if: steps.check_tag.outputs.exists == 'true'
+        run: |
+          echo "ℹ️ Tag ${{ steps.detect.outputs.suggested_tag }} already exists, skipping"
+

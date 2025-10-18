@@ -1,0 +1,31 @@
+// Brand colors
+$brand-primary: rgb(66, 116, 255);
+$brand-secondary: rgb(91, 116, 186);
+$brand-success: rgb(33, 200, 0);
+$brand-info: rgb(0, 140, 200);
+$brand-warning: rgb(200, 107, 0);
+$brand-danger: rgb(200, 16, 2);
+$brand-light: rgb(199, 199, 199);
+$brand-dark: rgb(56, 56, 56);
+
+// Custom theme colors
+$custom-theme-colors: (
+        "brand": #111827,
+        "accent": #14b8a6
+);
+
+// Custom font settings
+$font-family-sans-serif: "Ubuntu Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-monospace: "Ubuntu Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+$font-weight-lighter: 200;
+$font-weight-light: 200;
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 800;
+
+$font-weight-base: 400;
+$headings-font-weight: 600;
+$btn-font-weight: 600;
+
+$enable-rfs: true;

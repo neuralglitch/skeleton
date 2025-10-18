@@ -1,0 +1,256 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Detect Symfony Version from composer.json
+ * 
+ * This script reads the Symfony version from composer.json
+ * and suggests appropriate version tags.
+ * 
+ * Usage:
+ *   bin/detect-symfony-version
+ *   bin/detect-symfony-version --next-patch
+ */
+
+// Color output helpers
+function color_output(string $text, string $color): string {
+    $colors = [
+        'red' => "\033[31m",
+        'green' => "\033[32m",
+        'yellow' => "\033[33m",
+        'blue' => "\033[34m",
+        'cyan' => "\033[36m",
+        'reset' => "\033[0m",
+    ];
+    
+    return $colors[$color] . $text . $colors['reset'];
+}
+
+function error(string $message): void {
+    echo color_output("❌ Error: ", 'red') . $message . PHP_EOL;
+    exit(1);
+}
+
+function success(string $message): void {
+    echo color_output("✅ ", 'green') . $message . PHP_EOL;
+}
+
+function info(string $message): void {
+    echo color_output("ℹ️  ", 'blue') . $message . PHP_EOL;
+}
+
+// Get installed Symfony version from composer.lock
+function get_installed_symfony_version(): ?string {
+    $composerLockPath = __DIR__ . '/../composer.lock';
+    
+    if (!file_exists($composerLockPath)) {
+        return null;
+    }
+    
+    $composerLock = json_decode(file_get_contents($composerLockPath), true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return null;
+    }
+    
+    // Find symfony/framework-bundle in packages
+    $packages = array_merge(
+        $composerLock['packages'] ?? [],
+        $composerLock['packages-dev'] ?? []
+    );
+    
+    foreach ($packages as $package) {
+        if ($package['name'] === 'symfony/framework-bundle') {
+            // Remove 'v' prefix if present (e.g., v6.4.15 -> 6.4.15)
+            return ltrim($package['version'], 'v');
+        }
+    }
+    
+    return null;
+}
+
+// Get Symfony version constraint from composer.json
+function get_symfony_version_constraint(): ?string {
+    $composerPath = __DIR__ . '/../composer.json';
+    
+    if (!file_exists($composerPath)) {
+        error("composer.json not found");
+    }
+    
+    $composer = json_decode(file_get_contents($composerPath), true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error("Failed to parse composer.json: " . json_last_error_msg());
+    }
+    
+    // Check extra.symfony.require first
+    if (isset($composer['extra']['symfony']['require'])) {
+        return $composer['extra']['symfony']['require'];
+    }
+    
+    // Fallback to framework-bundle version
+    if (isset($composer['require']['symfony/framework-bundle'])) {
+        return $composer['require']['symfony/framework-bundle'];
+    }
+    
+    return null;
+}
+
+// Parse version string to extract version components
+function parse_symfony_version(string $version): ?array {
+    // Handle full versions like "6.4.15" or patterns like "6.4.*", "^6.4", "~6.4", "6.4"
+    if (preg_match('/(\d+)\.(\d+)(?:\.(\d+))?/', $version, $matches)) {
+        $major = (int)$matches[1];
+        $minor = (int)$matches[2];
+        $patch = isset($matches[3]) ? (int)$matches[3] : null;
+        
+        return [
+            'major' => $major,
+            'minor' => $minor,
+            'patch' => $patch,
+            'version' => $patch !== null 
+                ? "$major.$minor.$patch" 
+                : "$major.$minor",
+            'short_version' => "$major.$minor"
+        ];
+    }
+    
+    return null;
+}
+
+// Get latest tag matching the Symfony version
+function get_latest_matching_tag(string $symfonyVersion): ?string {
+    exec("git tag -l '$symfonyVersion.*' --sort=-version:refname", $output);
+    return $output[0] ?? null;
+}
+
+// Extract patch number from version
+function get_patch_number(string $version): int {
+    if (preg_match('/\d+\.\d+\.(\d+)$/', $version, $matches)) {
+        return (int)$matches[1];
+    }
+    return 0;
+}
+
+// Main execution
+echo PHP_EOL;
+echo color_output("═══════════════════════════════════════════════════════", 'cyan') . PHP_EOL;
+echo color_output("  Symfony Version Detector", 'cyan') . PHP_EOL;
+echo color_output("═══════════════════════════════════════════════════════", 'cyan') . PHP_EOL;
+echo PHP_EOL;
+
+$showNextPatch = in_array('--next-patch', $argv);
+$showJson = in_array('--json', $argv);
+
+// Try to get installed version first (from composer.lock), fallback to constraint (from composer.json)
+$installedVersion = get_installed_symfony_version();
+$constraintVersion = get_symfony_version_constraint();
+
+if ($installedVersion) {
+    $symfonyVersionString = $installedVersion;
+    $source = "composer.lock (installed version)";
+} elseif ($constraintVersion) {
+    $symfonyVersionString = $constraintVersion;
+    $source = "composer.json (version constraint)";
+} else {
+    error("Could not detect Symfony version from composer.json or composer.lock");
+}
+
+$versionInfo = parse_symfony_version($symfonyVersionString);
+
+if ($versionInfo === null) {
+    error("Could not parse Symfony version: $symfonyVersionString");
+}
+
+$symfonyVersion = $versionInfo['version'];
+$shortVersion = $versionInfo['short_version'];
+$major = $versionInfo['major'];
+$minor = $versionInfo['minor'];
+$patch = $versionInfo['patch'];
+
+if ($showJson) {
+    // Output JSON for scripting
+    $data = [
+        'symfony_version' => $symfonyVersion,
+        'symfony_version_short' => $shortVersion,
+        'symfony_version_raw' => $symfonyVersionString,
+        'major' => $major,
+        'minor' => $minor,
+        'patch' => $patch,
+        'source' => $installedVersion ? 'composer.lock' : 'composer.json',
+    ];
+    
+    // Get latest tag
+    $latestTag = get_latest_matching_tag($shortVersion);
+    $data['latest_tag'] = $latestTag;
+    
+    // Suggest next skeleton version (not Symfony version)
+    if ($latestTag) {
+        $patchNumber = get_patch_number($latestTag);
+        $data['next_version'] = $shortVersion . '.' . ($patchNumber + 1);
+    } else {
+        $data['next_version'] = $shortVersion . '.0';
+    }
+    
+    $data['branch'] = "main-$shortVersion";
+    
+    echo json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL;
+    exit(0);
+}
+
+// Human-readable output
+success("Detected Symfony version: " . color_output($symfonyVersion, 'green'));
+info("From: $source");
+if ($patch !== null) {
+    info("Installed: symfony/framework-bundle " . color_output($symfonyVersion, 'cyan'));
+}
+echo PHP_EOL;
+
+// Get existing tags (use short version for tag matching)
+$latestTag = get_latest_matching_tag($shortVersion);
+
+// Determine next skeleton version
+if ($latestTag) {
+    $patchNumber = get_patch_number($latestTag);
+    $nextVersion = $shortVersion . '.' . ($patchNumber + 1);
+} else {
+    $nextVersion = "$shortVersion.0";
+}
+
+if ($showNextPatch) {
+    echo $nextVersion . PHP_EOL;
+    exit(0);
+}
+
+if ($latestTag) {
+    info("Latest skeleton release: " . color_output($latestTag, 'cyan'));
+    echo PHP_EOL;
+    
+    info("Next skeleton version:");
+    echo "  • " . color_output($nextVersion, 'green') . " - Next release (includes Symfony $symfonyVersion)" . PHP_EOL;
+} else {
+    warning("No existing tags found for Symfony $shortVersion branch");
+    echo PHP_EOL;
+    info("Suggested version tag for first release:");
+    echo "  • " . color_output($nextVersion, 'green') . " - Initial release (includes Symfony $symfonyVersion)" . PHP_EOL;
+}
+
+echo "  • " . color_output($shortVersion, 'yellow') . " - Branch/short tag (optional, points to latest release)" . PHP_EOL;
+
+echo PHP_EOL;
+info("Version strategy:");
+echo "  " . color_output("✓", 'green') . " Branch: main-$shortVersion" . PHP_EOL;
+echo "  " . color_output("✓", 'green') . " Tags: $shortVersion.0, $shortVersion.1, $shortVersion.2, etc." . PHP_EOL;
+echo "  " . color_output("✓", 'green') . " Includes: Symfony $symfonyVersion" . PHP_EOL;
+echo "  " . color_output("✓", 'green') . " Tag when: Skeleton improvements, not every Symfony patch" . PHP_EOL;
+
+echo PHP_EOL;
+info("To create a new skeleton release:");
+echo "  " . color_output("bin/tag-version $nextVersion", 'cyan') . PHP_EOL;
+
+echo PHP_EOL;
+
+function warning(string $message): void {
+    echo color_output("⚠️  ", 'yellow') . $message . PHP_EOL;
+}
+

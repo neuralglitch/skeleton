@@ -1,0 +1,111 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-assets:
+    name: Build Assets
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, intl
+          coverage: none
+          tools: composer:v2
+      
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      
+      - name: Create .env for build
+        run: |
+          cat > .env << 'EOF'
+          APP_ENV=dev
+          APP_DEBUG=1
+          APP_SECRET=build-secret-for-ci
+          DEFAULT_URI=http://localhost
+          EOF
+      
+      - name: Build SASS
+        run: php bin/console sass:build
+      
+      - name: Verify CSS file exists
+        run: |
+          if [ ! -f "var/sass/app.output.css" ]; then
+            echo "❌ Build failed: CSS file not created at var/sass/app.output.css"
+            exit 1
+          fi
+          echo "✅ CSS file created successfully at var/sass/app.output.css"
+      
+      - name: Check CSS size
+        run: |
+          SIZE=$(du -k var/sass/app.output.css | cut -f1)
+          echo "📊 CSS size: ${SIZE}KB"
+          
+          if [ "$SIZE" -lt 1 ]; then
+            echo "❌ ERROR: CSS file is suspiciously small (${SIZE}KB)"
+            exit 1
+          fi
+          
+          if [ "$SIZE" -gt 500 ]; then
+            echo "⚠️ WARNING: CSS is larger than expected (${SIZE}KB)"
+            echo "Consider reviewing for unnecessary includes"
+          fi
+          
+          echo "✅ Size check passed (${SIZE}KB)"
+      
+      - name: Build ImportMap
+        run: php bin/console importmap:install
+      
+      - name: Compile Asset Map
+        run: php bin/console asset-map:compile
+      
+      - name: Verify compiled assets
+        run: |
+          if [ ! -d "public/assets" ]; then
+            echo "❌ ERROR: Asset compilation failed - public/assets directory not created"
+            exit 1
+          fi
+          
+          ASSET_COUNT=$(find public/assets -type f | wc -l)
+          echo "📦 Compiled assets: ${ASSET_COUNT} files"
+          
+          if [ "$ASSET_COUNT" -lt 1 ]; then
+            echo "❌ ERROR: No assets were compiled"
+            exit 1
+          fi
+          
+          echo "✅ Assets compiled successfully"
+      
+      - name: Cache warmup
+        run: php bin/console cache:warmup --env=prod
+      
+      - name: Report success
+        if: success()
+        run: |
+          echo "✅ All asset builds completed successfully"
+          echo "   - SASS compilation"
+          echo "   - ImportMap installation"
+          echo "   - Asset Map compilation"
+          echo "   - Production cache warmup"
+

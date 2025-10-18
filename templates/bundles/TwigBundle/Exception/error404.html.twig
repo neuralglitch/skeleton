@@ -1,0 +1,24 @@
+{% extends 'bundles/TwigBundle/Exception/base_error.html.twig' %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block error_icon %}
+    <twig:ux:icon name="bi:question-circle" class="mb-3 text-danger opacity-75" width="96" />
+{% endblock %}
+
+{% block error_title %}Page Not Found{% endblock %}
+
+{% block error_message %}
+    The page you're looking for doesn't exist or has been moved.
+{% endblock %}
+
+{% block error_details %}
+    <div class="alert alert-light border mb-4">
+        <small class="text-muted d-block mb-2"><strong>Possible reasons:</strong></small>
+        <ul class="text-start small text-muted mb-0">
+            <li>The URL might be misspelled</li>
+            <li>The page may have been removed or renamed</li>
+            <li>The link you followed might be outdated</li>
+        </ul>
+    </div>
+{% endblock %}

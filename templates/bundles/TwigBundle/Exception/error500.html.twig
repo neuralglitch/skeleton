@@ -1,0 +1,31 @@
+{% extends 'bundles/TwigBundle/Exception/base_error.html.twig' %}
+
+{% block title %}Internal Server Error{% endblock %}
+
+{% block error_icon %}
+    <twig:ux:icon name="bi:x-circle" class="mb-3 text-danger opacity-75" width="96" />
+{% endblock %}
+
+{% block error_title %}Internal Server Error{% endblock %}
+
+{% block error_message %}
+    Oops! Something went wrong on our end.
+{% endblock %}
+
+{% block error_details %}
+    <div class="alert alert-danger border-danger mb-4">
+        <div class="d-flex align-items-start">
+            <twig:ux:icon name="bi:exclamation-triangle" style="width: 24px; height: 24px;" class="me-2 flex-shrink-0" />
+            <div class="small">
+                <strong>We're working on it!</strong><br>
+                An unexpected error occurred. Our technical team has been automatically notified and is investigating the issue.
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block error_footer %}
+    <div class="mt-4 pt-4 border-top text-muted small">
+        If this problem persists, please contact support with error code: <strong>500</strong>
+    </div>
+{% endblock %}

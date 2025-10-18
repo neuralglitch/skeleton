@@ -1,0 +1,95 @@
+{
+    "name": "neuralglitch/skeleton",
+    "description": "A modern Symfony 6.4 skeleton with Bootstrap 5, Stimulus, and Asset Mapper",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.1",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "symfony/asset": "6.4.*",
+        "symfony/asset-mapper": "6.4.*",
+        "symfony/console": "6.4.*",
+        "symfony/dotenv": "6.4.*",
+        "symfony/flex": "^2.8.2",
+        "symfony/framework-bundle": "6.4.*",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/runtime": "6.4.*",
+        "symfony/security-csrf": "6.4.*",
+        "symfony/stimulus-bundle": "^2.30",
+        "symfony/string": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
+        "symfony/ux-icons": "^2.30",
+        "symfony/ux-turbo": "^2.30",
+        "symfony/ux-twig-component": "^2.30",
+        "symfony/yaml": "6.4.*",
+        "symfonycasts/sass-bundle": "^0.8.3",
+        "twbs/bootstrap": "^5.3.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bump-after-update": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd",
+            "sass:build": "symfony-cmd",
+            "asset-map:compile": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.4.*"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1.29",
+        "phpunit/phpunit": "^10.5",
+        "roave/security-advisories": "dev-latest",
+        "symfony/browser-kit": "6.4.*",
+        "symfony/css-selector": "6.4.*",
+        "symfony/debug-bundle": "6.4.*",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "6.4.*",
+        "symfony/stopwatch": "6.4.*",
+        "symfony/web-profiler-bundle": "6.4.*"
+    }
+}
