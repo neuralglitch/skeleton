@@ -4,7 +4,7 @@ FROM php:8.1-apache
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # System + PHP-Build-Deps
-# hadolint ignore=DL3008
+# hadolint ignore=DL3008,SC2086
 RUN rm -rf /var/www/html \
     && mkdir -p /var/www/public \
     && apt-get update \
@@ -21,7 +21,7 @@ RUN rm -rf /var/www/html \
         libzip-dev \
         postgresql-client \
         unzip zip \
-        "$PHPIZE_DEPS"
+        $PHPIZE_DEPS
 
 # PHP Config
 COPY php/php.ini /usr/local/etc/php/php.ini
@@ -38,7 +38,8 @@ RUN pecl install apcu \
     && pecl install xdebug \
     && docker-php-ext-enable apcu redis imagick
 
-RUN apt-get purge -y --auto-remove libmagickwand-dev libpq-dev "$PHPIZE_DEPS" \
+# hadolint ignore=SC2086
+RUN apt-get purge -y --auto-remove libmagickwand-dev libpq-dev $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Composer
