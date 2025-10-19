@@ -24,10 +24,10 @@
 [![Maintenance](https://img.shields.io/badge/Maintained-Yes-green.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/commits/main)
 [![Tested on PHP](https://img.shields.io/badge/Tested%20on-PHP%208.2/8.3/8.4-4F5B93.svg?style=flat-square)](https://www.php.net/)
 
-[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
-[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
-[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
-[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=main-7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
+[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
+[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
+[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
+[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=7.3)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
 </div>
 
 ---
@@ -129,7 +129,7 @@ This project uses **branch-per-Symfony-version** strategy:
 
 **Clone Symfony 7.3 (Current Stable):**
 ```bash
-git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch 7.3 https://github.com/neuralglitch/skeleton.git myproject
 ```
 
 **Clone latest version:**

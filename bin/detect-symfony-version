@@ -192,7 +192,7 @@ if ($showJson) {
         $data['next_version'] = $shortVersion . '.0';
     }
     
-    $data['branch'] = "main-$shortVersion";
+    $data['branch'] = "$shortVersion";
     
     echo json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL;
     exit(0);
