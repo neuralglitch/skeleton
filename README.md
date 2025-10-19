@@ -271,13 +271,13 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 ## Use Cases
 
 This skeleton is ideal for:
-- 🏗️ Starting new Symfony 7.3 projects with modern tooling
-- 📚 Learning Symfony with AssetMapper (no webpack/vite complexity)
-- 🎨 Projects requiring deep Bootstrap customization
-- 🐳 Teams wanting Docker-based development environments
-- ⚡ Applications needing modern JavaScript without Node.js overhead
-- 🚀 Projects requiring comprehensive CI/CD from day one
-- 🏢 Enterprise applications requiring high code quality standards
+- Starting new Symfony 7.3 projects with modern tooling
+- Learning Symfony with AssetMapper (no webpack/vite complexity)
+- Projects requiring deep Bootstrap customization
+- Teams wanting Docker-based development environments
+- Applications needing modern JavaScript without Node.js overhead
+- Projects requiring comprehensive CI/CD from day one
+- Enterprise applications requiring high code quality standards
 
 ---
 
@@ -308,7 +308,7 @@ This skeleton is ideal for:
 - Automatic vendor management via ImportMap
 
 ### Docker Services
-- **Web Service** - PHP 8.3-Apache with SSL
+- **Web Service** - PHP 8.2-Apache with SSL
 - Exposes ports 80 (HTTP) and 443 (HTTPS)
 - Volume mounting for live code updates
 
@@ -397,6 +397,6 @@ Built with:
 
 <div align="center">
 
-**Made with ❤️ by [neuralglit.ch](https://neuralglit.ch)**
+**Made with ❤ by [neuralglit.ch](https://neuralglit.ch)**
 
 </div>
