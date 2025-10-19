@@ -24,10 +24,10 @@
 [![Maintenance](https://img.shields.io/badge/Maintained-Yes-green.svg?style=flat-square)](https://github.com/neuralglitch/skeleton/commits/main)
 [![Tested on PHP](https://img.shields.io/badge/Tested%20on-PHP%208.1/8.2/8.3/8.4-4F5B93.svg?style=flat-square)](https://www.php.net/)
 
-[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
-[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
-[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
-[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=main-6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
+[![Build](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml/badge.svg?branch=6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/build.yml)
+[![Tests](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml/badge.svg?branch=6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/tests.yml)
+[![Static Analysis](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml/badge.svg?branch=6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/static-analysis.yml)
+[![Docker](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml/badge.svg?branch=6.4)](https://github.com/neuralglitch/skeleton/actions/workflows/docker.yml)
 </div>
 
 ---
@@ -129,7 +129,7 @@ This project uses **branch-per-Symfony-version** strategy:
 
 **Clone Symfony 6.4 LTS (Recommended):**
 ```bash
-git clone --branch main-6.4 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git myproject
 ```
 
 **Clone latest version:**
@@ -271,13 +271,13 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 ## Use Cases
 
 This skeleton is ideal for:
-- 🏗️ Starting new Symfony 6.4 projects with modern tooling
-- 📚 Learning Symfony with AssetMapper (no webpack/vite complexity)
-- 🎨 Projects requiring deep Bootstrap customization
-- 🐳 Teams wanting Docker-based development environments
-- ⚡ Applications needing modern JavaScript without Node.js overhead
-- 🚀 Projects requiring comprehensive CI/CD from day one
-- 🏢 Enterprise applications requiring high code quality standards
+- Starting new Symfony 6.4 projects with modern tooling
+- Learning Symfony with AssetMapper (no webpack/vite complexity)
+- Projects requiring deep Bootstrap customization
+- Teams wanting Docker-based development environments
+- Applications needing modern JavaScript without Node.js overhead
+- Projects requiring comprehensive CI/CD from day one
+- Enterprise applications requiring high code quality standards
 
 ---
 
@@ -397,6 +397,6 @@ Built with:
 
 <div align="center">
 
-**Made with ❤️ by [neuralglit.ch](https://neuralglit.ch)**
+**Made with ❤ by [neuralglit.ch](https://neuralglit.ch)**
 
 </div>

@@ -25,7 +25,7 @@ Complete guide for versioning, branching, and tagging the Symfony Skeleton proje
 
 **Branch per Symfony version + Tags for skeleton releases**
 
-- One branch per Symfony version (`main-6.4`, `main-7.3`, `main-7.4`)
+- One branch per Symfony version (`6.4`, `7.3`, `7.4`)
 - Tags are skeleton releases (`6.4.0`, `6.4.1`), not Symfony patch versions
 - Tag when YOU make improvements, not every Symfony patch
 - Users clone branches, get updates with `git pull`
@@ -34,16 +34,16 @@ Complete guide for versioning, branching, and tagging the Symfony Skeleton proje
 
 ```bash
 # Clone Symfony 6.4 LTS
-git clone --branch main-6.4 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git myproject
 
 # Or use short tag
 git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git myproject
 
 # Clone Symfony 7.4 LTS (recommended)
-git clone --branch main-7.4 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch 7.4 https://github.com/neuralglitch/skeleton.git myproject
 
 # Clone Symfony 7.3 (current stable)
-git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproject
+git clone --branch 7.3 https://github.com/neuralglitch/skeleton.git myproject
 ```
 
 **What you get:**
@@ -55,9 +55,9 @@ git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproje
 ### 🔧 For Maintainers
 
 **Branches:**
-- `main-6.4` - Symfony 6.4 LTS (until Nov 2027)
-- `main-7.3` - Symfony 7.3 (until Jan 2026)
-- `main-7.4` - Symfony 7.4 LTS (until Nov 2029)
+- `6.4` - Symfony 6.4 LTS (until Nov 2027)
+- `7.3` - Symfony 7.3 (until Jan 2026)
+- `7.4` - Symfony 7.4 LTS (until Nov 2029)
 - `main` - Development
 
 **Tags (on each branch):**
@@ -78,9 +78,9 @@ git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproje
 
 | Symfony | Branch | Status | Released | EOL | Priority |
 |---------|--------|--------|----------|-----|----------|
-| **6.4 LTS** | `main-6.4` | ✅ Active | Nov 2023 | **Nov 2027** | High ⭐ |
-| **7.3** | `main-7.3` | ✅ Active | May 2025 | **Jan 2026** | Medium |
-| **7.4 LTS** | `main-7.4` | ✅ Active | Nov 2025 | **Nov 2029** | High ⭐ |
+| **6.4 LTS** | `6.4` | ✅ Active | Nov 2023 | **Nov 2027** | High ⭐ |
+| **7.3** | `7.3` | ✅ Active | May 2025 | **Jan 2026** | Medium |
+| **7.4 LTS** | `7.4` | ✅ Active | Nov 2025 | **Nov 2029** | High ⭐ |
 
 **LTS** = Long Term Support (48 months)  
 **Standard** = Regular release (8 months bug fixes, 14 months security fixes)
@@ -88,24 +88,24 @@ git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproje
 ### 🎯 Recommended Versions
 
 **For Production:**
-- **Now:** Use `main-6.4` (Symfony 6.4 LTS, 2 years support left) or `main-7.4` (Symfony 7.4 LTS, 4 years support)
-- **Recommended:** Use `main-7.4` (Symfony 7.4 LTS, newest LTS)
+- **Now:** Use `6.4` (Symfony 6.4 LTS, 2 years support left) or `7.4` (Symfony 7.4 LTS, 4 years support)
+- **Recommended:** Use `7.4` (Symfony 7.4 LTS, newest LTS)
 
 **For New Development:**
-- **Recommended:** Use `main-7.4` (latest LTS)
-- **Alternative:** Use `main-7.3` (current stable, shorter support)
+- **Recommended:** Use `7.4` (latest LTS)
+- **Alternative:** Use `7.3` (current stable, shorter support)
 
 **For Legacy Projects (PHP 8.1):**
-- Use `main-6.4` (Symfony 6.4 supports PHP 8.1)
+- Use `6.4` (Symfony 6.4 supports PHP 8.1)
 
 ### 📅 Maintenance Schedule
 
 #### Now (October 2025)
 
 **Active branches:**
-- `main-6.4` (Symfony 6.4 LTS)
-- `main-7.3` (Symfony 7.3 stable, EOL Jan 2026)
-- `main-7.4` (Symfony 7.4 LTS, released Nov 2025)
+- `6.4` (Symfony 6.4 LTS)
+- `7.3` (Symfony 7.3 stable, EOL Jan 2026)
+- `7.4` (Symfony 7.4 LTS, released Nov 2025)
 
 **Status:**
 - ✅ Symfony 7.4 LTS released (November 2025)
@@ -116,12 +116,12 @@ git clone --branch main-7.3 https://github.com/neuralglitch/skeleton.git myproje
 
 **January 2026:**
 - Symfony 7.3 reaches EOL
-- Archive `main-7.3` branch (read-only)
+- Archive `7.3` branch (read-only)
 - Focus on LTS branches only
 
 **Active branches (2026-2027):**
-- `main-6.4` (until Nov 2027)
-- `main-7.4` (until Nov 2029)
+- `6.4` (until Nov 2027)
+- `7.4` (until Nov 2029)
 
 **Strategy:**
 - Backport critical fixes to both LTS branches
@@ -162,17 +162,17 @@ composer update symfony/*
 ### 🌳 Branch Structure
 
 ```
-main-6.4 (Symfony 6.4 LTS)
+6.4 (Symfony 6.4 LTS)
   ├─ Tags: 6.4.0, 6.4.1, 6.4.2, ...
   ├─ Includes: Symfony 6.4.x (currently 6.4.26)
   └─ Maintained until: November 2027 (security fixes)
 
-main-7.3 (Symfony 7.3)
+7.3 (Symfony 7.3)
   ├─ Tags: 7.3.0, 7.3.1, 7.3.2, ...
   ├─ Includes: Symfony 7.3.x
   └─ Maintained until: January 2026
 
-main-7.4 (Symfony 7.4 LTS)
+7.4 (Symfony 7.4 LTS)
   ├─ Tags: 7.4.0, 7.4.1, 7.4.2, ...
   ├─ Includes: Symfony 7.4.x
   └─ Maintained until: November 2029 (security fixes)
@@ -184,7 +184,7 @@ main (latest/development)
 
 ### Branch Naming Convention
 
-- `main-X.Y` - Symfony X.Y branch (e.g., `main-6.4`)
+- `main-X.Y` - Symfony X.Y branch (e.g., `6.4`)
 - `main` - Development branch (latest Symfony)
 
 ### When to Create New Branches
@@ -202,19 +202,19 @@ main (latest/development)
 
 #### Active Branches (Maintain These)
 
-**`main-6.4` - Symfony 6.4 LTS ⭐**
+**`6.4` - Symfony 6.4 LTS ⭐**
 - Support until: November 2027 (security fixes)
 - PHP: 8.1+
 - Status: Production-ready
 - Priority: HIGH
 
-**`main-7.3` - Symfony 7.3**
+**`7.3` - Symfony 7.3**
 - Support until: January 2026
 - PHP: 8.2+
 - Status: Active, EOL approaching
 - Priority: MEDIUM (archive in Jan 2026)
 
-**`main-7.4` - Symfony 7.4 LTS ⭐**
+**`7.4` - Symfony 7.4 LTS ⭐**
 - Support until: November 2029 (security fixes)
 - PHP: 8.2+
 - Status: Active (released Nov 2025)
@@ -283,9 +283,9 @@ Don't create tag for:
 ### Tag Naming
 
 **Full version tags:**
-- `6.4.0`, `6.4.1`, `6.4.2` (on `main-6.4` branch)
+- `6.4.0`, `6.4.1`, `6.4.2` (on `6.4` branch)
 - `7.0.0`, `7.0.1`, `7.0.2` (on `main-7.0` branch)
-- `7.4.0`, `7.4.1`, `7.4.2` (on `main-7.4` branch)
+- `7.4.0`, `7.4.1`, `7.4.2` (on `7.4` branch)
 
 **Short tags (optional):**
 - `6.4`, `7.0`, `7.4` (points to latest patch for that version)
@@ -296,8 +296,8 @@ Don't create tag for:
 ### Validation
 
 Tags must match the Symfony MAJOR.MINOR from the branch:
-- ✅ `6.4.0` on `main-6.4` branch → Valid
-- ❌ `7.0.0` on `main-6.4` branch → Invalid
+- ✅ `6.4.0` on `6.4` branch → Valid
+- ❌ `7.0.0` on `6.4` branch → Invalid
 
 The `bin/tag-version` script enforces this automatically.
 
@@ -313,23 +313,23 @@ The `bin/tag-version` script enforces this automatically.
 
 ### Step 1: Create Version Branches
 
-#### 1a. Create `main-6.4` Branch (Symfony 6.4 LTS)
+#### 1a. Create `6.4` Branch (Symfony 6.4 LTS)
 
 ```bash
 # Create branch from current main (assuming Symfony 6.4)
 git checkout main
-git checkout -b main-6.4
-git push -u origin main-6.4
+git checkout -b 6.4
+git push -u origin 6.4
 ```
 
-#### 1b. Create `main-7.3` Branch (Symfony 7.3)
+#### 1b. Create `7.3` Branch (Symfony 7.3)
 
 ```bash
 # Start from main
 git checkout main
 
 # Create new branch
-git checkout -b main-7.3
+git checkout -b 7.3
 
 # Upgrade to Symfony 7.3
 composer require "symfony/framework-bundle:7.3.*" --no-update
@@ -342,17 +342,17 @@ composer update symfony/*
 
 git add composer.json composer.lock
 git commit -m "Upgrade to Symfony 7.3"
-git push -u origin main-7.3
+git push -u origin 7.3
 ```
 
-#### 1c. Create `main-7.4` Branch (Symfony 7.4 LTS)
+#### 1c. Create `7.4` Branch (Symfony 7.4 LTS)
 
 ```bash
 # Symfony 7.4 LTS released November 2025
 git checkout main
 
 # Create new branch
-git checkout -b main-7.4
+git checkout -b 7.4
 
 # Upgrade to Symfony 7.4
 composer require "symfony/framework-bundle:7.4.*" --no-update
@@ -361,7 +361,7 @@ composer update symfony/*
 # Test and commit
 git add composer.json composer.lock
 git commit -m "Upgrade to Symfony 7.4 LTS"
-git push -u origin main-7.4
+git push -u origin 7.4
 ```
 
 ### Step 2: Create Initial Tags
@@ -369,7 +369,7 @@ git push -u origin main-7.4
 #### 2a. Tag Symfony 6.4 Branch
 
 ```bash
-git checkout main-6.4
+git checkout 6.4
 
 # Check version
 docker compose exec web php bin/detect-symfony-version
@@ -399,7 +399,7 @@ git push origin 6.4.0
 #### 2b. Tag Symfony 7.3 Branch
 
 ```bash
-git checkout main-7.3
+git checkout 7.3
 bin/tag-version 7.3.0
 ```
 
@@ -421,7 +421,7 @@ git push origin 7.3.0
 #### 2c. Tag Symfony 7.4 Branch
 
 ```bash
-git checkout main-7.4
+git checkout 7.4
 bin/tag-version 7.4.0
 ```
 
@@ -443,17 +443,17 @@ git push origin 7.4.0
 
 ```bash
 # For Symfony 6.4 LTS
-git checkout main-6.4
+git checkout 6.4
 git tag 6.4
 git push origin 6.4
 
 # For Symfony 7.3
-git checkout main-7.3
+git checkout 7.3
 git tag 7.3
 git push origin 7.3
 
 # For Symfony 7.4 LTS
-git checkout main-7.4
+git checkout 7.4
 git tag 7.4
 git push origin 7.4
 ```
@@ -462,8 +462,8 @@ git push origin 7.4
 
 **On GitHub:**
 1. Go to: Settings → Branches
-2. Recommended default branch: `main-7.4` (latest LTS)
-3. Alternative: `main-6.4` (older LTS, PHP 8.1 compatible)
+2. Recommended default branch: `7.4` (latest LTS)
+3. Alternative: `6.4` (older LTS, PHP 8.1 compatible)
 
 ### Step 5: Branch Protection
 
@@ -483,7 +483,7 @@ git push origin 7.4
 ```bash
 # Test Symfony 6.4 LTS
 cd /tmp
-git clone --branch main-6.4 https://github.com/neuralglitch/skeleton.git test-64
+git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git test-64
 cd test-64
 git describe --tags  # Should show: 6.4.0
 
@@ -513,7 +513,7 @@ bin/detect-symfony-version
   • 6.4 - Branch/short tag (optional)
 
 ℹ️  Version strategy:
-  ✓ Branch: main-6.4
+  ✓ Branch: 6.4
   ✓ Tags: 6.4.0, 6.4.1, 6.4.2, etc.
   ✓ Tag when: Skeleton improvements, not every Symfony patch
 
@@ -525,7 +525,7 @@ bin/detect-symfony-version
 
 ```bash
 # Checkout the branch
-git checkout main-6.4
+git checkout 6.4
 
 # Check suggested version
 bin/detect-symfony-version
@@ -872,7 +872,7 @@ If you were tagging manually:
 #### Updating Symfony Patches (No Tag)
 
 ```bash
-git checkout main-6.4
+git checkout 6.4
 
 composer update symfony/*
 git commit -am "Update Symfony to 6.4.30"
@@ -885,7 +885,7 @@ git push
 #### Making Skeleton Improvements (Create Tag)
 
 ```bash
-git checkout main-6.4
+git checkout 6.4
 
 # Make your changes
 git commit -am "Improve Docker configuration"
@@ -912,17 +912,17 @@ git commit -m "Fix Docker port mapping"
 git push
 
 # Backport to 6.4
-git checkout main-6.4
+git checkout 6.4
 git cherry-pick <commit-hash>
 git push
 
 # Backport to 7.4
-git checkout main-7.4
+git checkout 7.4
 git cherry-pick <commit-hash>
 git push
 
 # Tag when ready
-git checkout main-6.4
+git checkout 6.4
 bin/tag-version 6.4.2
 git push origin 6.4.2
 ```
@@ -969,7 +969,7 @@ When a Symfony version reaches EOL (e.g., Symfony 7.3 in January 2026):
 
 ```bash
 # Make final security release
-git checkout main-7.3
+git checkout 7.3
 # Apply any final security patches
 git commit -am "Final security update"
 
@@ -978,7 +978,7 @@ git tag 7.3.99-eol -m "End of life release"
 git push origin 7.3.99-eol
 
 # Archive branch (on GitHub)
-# Settings → Branches → Archive main-7.3
+# Settings → Branches → Archive 7.3
 
 # Update README with EOL notice
 ```
@@ -1063,9 +1063,9 @@ Update stuff
 ### Q: How do users know which branch to use?
 
 **A:** README clearly states:
-- `main-7.4` for Symfony 7.4 LTS (recommended, newest LTS)
-- `main-6.4` for Symfony 6.4 LTS (older LTS, PHP 8.1 compatible)
-- `main-7.3` for Symfony 7.3 (current stable, shorter support)
+- `7.4` for Symfony 7.4 LTS (recommended, newest LTS)
+- `6.4` for Symfony 6.4 LTS (older LTS, PHP 8.1 compatible)
+- `7.3` for Symfony 7.3 (current stable, shorter support)
 - Tags for specific releases
 
 ### Q: What if I want breaking changes?
@@ -1140,13 +1140,13 @@ git tag -f 6.4
 git push -f origin 6.4
 
 # Clone specific branch
-git clone --branch main-6.4 https://github.com/neuralglitch/skeleton.git
+git clone --branch 6.4 https://github.com/neuralglitch/skeleton.git
 
 # Clone specific tag
 git clone --branch 6.4.1 https://github.com/neuralglitch/skeleton.git
 
 # Switch branches
-git checkout main-7.4
+git checkout 7.4
 
 # Pull updates
 git pull
