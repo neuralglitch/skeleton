@@ -123,7 +123,7 @@ If you don't want to use Docker, you can run the application using Symfony CLI o
 The Symfony CLI provides a local web server with TLS support.
 
 #### Prerequisites
-- PHP 8.1+ installed locally
+- PHP 8.2+ installed locally
 - [Symfony CLI](https://symfony.com/download) installed
 
 #### Setup

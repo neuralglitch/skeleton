@@ -70,7 +70,7 @@ This project serves as a comprehensive starting point that showcases:
 
 ### CI/CD Pipeline
 - **Build Workflow** - Asset compilation and validation
-- **Test Workflow** - Matrix testing across PHP 8.1-8.4
+- **Test Workflow** - Matrix testing across PHP 8.2-8.4
 - **Static Analysis** - PHPStan, composer validation, security audit, YAML/Twig linting
 - **Docker Workflow** - Container linting, building, and health checks
 - **Auto-Tag Workflow** - Automatic version tagging on Symfony updates
@@ -258,7 +258,7 @@ docker compose exec web vendor/bin/phpunit --coverage-html coverage/
 ### Testing
 - **PHPUnit 11.5** with comprehensive configuration
 - **80% Code Coverage Goal** - Monitored in CI/CD
-- **Matrix Testing** - Tested across PHP 8.1, 8.2, 8.3, and 8.4
+- **Matrix Testing** - Tested across PHP 8.2, 8.3, and 8.4
 - **Functional Tests** - Application availability testing included
 
 ### Security
@@ -324,7 +324,7 @@ This skeleton is ideal for:
 - Production cache warmup  
 
 ### Test Workflow
-- PHP 8.1, 8.2, 8.3, 8.4 matrix testing  
+- PHP 8.2, 8.3, 8.4 matrix testing  
 - PHPUnit with testdox output  
 - Code coverage reporting  
 - Coverage artifacts  
