@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ main, main-6.4, main-7.3, main-7.4, main-8.0, develop ]
+    branches: [ main, 6.4, 7.3, 7.4, 8.0, develop ]
   pull_request:
-    branches: [ main, main-6.4, main-7.3, main-7.4, main-8.0, develop ]
+    branches: [ main, 6.4, 7.3, 7.4, 8.0, develop ]
 
 jobs:
   build-assets:
