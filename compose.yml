@@ -6,8 +6,8 @@ services:
     volumes:
       - ./:/var/www/
     ports:
-      - "60080:80"
-      - "60443:443"
+      - "80:80"
+      - "443:443"
     environment:
       # Set XDEBUG_ENABLED=1 to enable Xdebug on container start
       # Or use: docker compose exec web bin/xdebug on
