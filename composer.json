@@ -66,6 +66,7 @@
             "asset-map:compile": "symfony-cmd"
         },
         "post-install-cmd": [
+            "@php bin/console app:install --no-interaction || true",
             "@auto-scripts"
         ],
         "post-update-cmd": [
