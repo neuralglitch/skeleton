@@ -115,11 +115,22 @@ For detailed installation instructions, see **[INSTALL.md](INSTALL.md)**
 1. **Clone the repository** (use a specific version tag for production):
    ```bash
    git clone --branch 6.4 --depth 1 https://github.com/neuralglitch/skeleton.git myproject
+   cd myproject
    ```
-2. Build and start Docker containers
-3. Install dependencies with Composer
-4. Build SCSS and compile assets
-5. Visit `https://localhost`
+2. **Build and start Docker containers**:
+   ```bash
+   docker compose build && docker compose up -d
+   ```
+3. **Install dependencies** (automatically runs setup):
+   ```bash
+   docker compose exec web composer install
+   ```
+   
+   This automatically:
+   - Creates `.env.local` and generates `APP_SECRET`
+   - Clears and warms up cache
+   - Installs assets and builds SASS
+4. **Visit** `https://localhost:60443`
 
 See the [Installation Guide](INSTALL.md) for complete step-by-step instructions and troubleshooting.
 

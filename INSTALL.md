@@ -72,33 +72,48 @@ docker compose up -d
 docker compose down
 ```
 
-### 3. Environment Files
+### 3. Install Dependencies (Automated Setup)
 
-**Important:** Generate a secure `APP_SECRET` for production:
-```bash
-docker compose exec web php -r "echo bin2hex(random_bytes(16)) . PHP_EOL;"
-```
+**Recommended Approach:**
 
-### 4. Install Dependencies
+Simply run composer install, which automatically handles the complete setup:
 
 ```bash
 docker compose exec web composer install
 ```
 
-### 5. Build Assets
-#### 5.a. Locally
+This will automatically:
+- Create `.env.local` file if it doesn't exist
+- Generate `APP_SECRET` automatically
+- Clear and warm up the application cache
+- Install assets
+- Compile SASS
+- Build asset map
+
+**Manual Installation Command (Optional):**
+
+If you need to run the installation separately or regenerate configuration:
+
 ```bash
-docker compose exec web bin/console asset-map:compile
-docker compose exec web bin/console sass:build --watch
+# Run installation command
+docker compose exec web php bin/console app:install
+
+# Force overwrite existing .env.local
+docker compose exec web php bin/console app:install --force
 ```
 
-#### 5.b. Production
+**Manual Setup (Alternative):**
+
+If you prefer complete manual setup:
+
 ```bash
-docker compose exec web bin/console asset-map:compile
-docker compose exec web bin/console sass:build
+# Create .env.local and generate a secure APP_SECRET
+docker compose exec web php -r "echo bin2hex(random_bytes(16)) . PHP_EOL;"
+# Copy the output and add it to .env.local:
+# APP_SECRET=<generated-secret>
 ```
 
-### 6. Run Tests
+### 4. Run Tests
 ```bash
 docker compose exec web bin/phpunit
 ```
@@ -128,29 +143,19 @@ The Symfony CLI provides a local web server with TLS support.
 
 #### Setup
 
-1. **Install Dependencies**
+1. **Install Dependencies** (automatically sets up everything)
    ```bash
    composer install
    ```
-
-2. **Create Environment File**
+   
+   This automatically creates `.env.local`, generates `APP_SECRET`, clears cache, and builds assets.
+   
+   **Manual Installation Command (if needed):**
    ```bash
-   cp .env .env.local
-   # Edit .env.local with your configuration
+   php bin/console app:install --force
    ```
 
-3. **Generate APP_SECRET**
-   ```bash
-   php -r "echo bin2hex(random_bytes(16)) . PHP_EOL;"
-   ```
-
-4. **Build Assets**
-   ```bash
-   php bin/console sass:build
-   php bin/console asset-map:compile
-   ```
-
-5. **Start the Server**
+2. **Start the Server**
    ```bash
    symfony serve
    ```
@@ -166,7 +171,7 @@ The Symfony CLI provides a local web server with TLS support.
    symfony serve
    ```
 
-6. **Access Application**
+3. **Access Application**
    
    Visit: `https://127.0.0.1:8000` (or the port shown in terminal)
 
@@ -192,29 +197,19 @@ For quick testing without additional tools.
 
 #### Setup
 
-1. **Install Dependencies**
+1. **Install Dependencies** (automatically sets up everything)
    ```bash
    composer install
    ```
-
-2. **Create Environment File**
+   
+   This automatically creates `.env.local`, generates `APP_SECRET`, clears cache, and builds assets.
+   
+   **Manual Installation Command (if needed):**
    ```bash
-   cp .env .env.local
-   # Edit .env.local with your configuration
+   php bin/console app:install --force
    ```
 
-3. **Generate APP_SECRET**
-   ```bash
-   php -r "echo bin2hex(random_bytes(16)) . PHP_EOL;"
-   ```
-
-4. **Build Assets**
-   ```bash
-   php bin/console sass:build
-   php bin/console asset-map:compile
-   ```
-
-5. **Start the Server**
+2. **Start the Server**
    ```bash
    php -S 127.0.0.1:8000 -t public/
    ```
@@ -224,7 +219,7 @@ For quick testing without additional tools.
    php -S 0.0.0.0:8000 -t public/
    ```
 
-6. **Access Application**
+3. **Access Application**
    
    Visit: `http://127.0.0.1:8000`
 
